@@ -1,0 +1,8 @@
+.idea/
+venv/
+data/
+test/
+test.py
+*.pyc
+*.txt
+mongodb_data/
