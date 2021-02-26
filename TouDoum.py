@@ -7,7 +7,6 @@ from core.Config import Config
 from core.Client import Client
 from core.Server import Server
 from core.manager.PluginManager import PluginManager
-from core.manager.DataDriverManager import DataDriverManager
 from core.lib import console
 
 
