@@ -1,41 +1,13 @@
 version: '3.3'
 
-# todo add env var to server and client class
-
 services:
 
-  mongo:
-    image: mongo
-    container_name: mongo
-    volumes:
-      - ./mongodb_data/:/data/db
-
-  mongo-express:
-    image: mongo-express
-    container_name: mongo_ui
+  postgres:
+    image: postgres
+    hostname: postgres
+    container_name: postgres
+    env_file: .env
     ports:
-      - 8081:8081
-    depends_on:
-      - mongo
-
-  server:
-    container_name: server
-    build: .
-    image: msterhuj/toudoum
-    env_file: .env
-    environment:
-      - "IS_SERVER=True"
-      - "IP_RANGE_LIST=192.168.0.0/24"
-    depends_on:
-      - mongo
-
-  client:
-    build: .
-    image: msterhuj/toudoum
-    env_file: .env
-    environment:
-      - "MONGO_HOST=mongodb://mongo:27017/"
-      - "MONGO_DB_NAME=ipisinthisdb"
-    depends_on:
-      - mongo
-      - server
+      - 5432:5432
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
