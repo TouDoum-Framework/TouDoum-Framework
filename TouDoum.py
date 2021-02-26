@@ -11,32 +11,11 @@ from core.lib import console
 
 
 @click.group()
-def cli_config():
-    pass
-
-
-@click.group()
 def cli_run():
     pass
 
 
-cli = click.CommandCollection(sources=[cli_config, cli_run])
-
-
-@cli_config.command()
-@click.option('--data-driver', '-dd', 'data_driver', help="Give a driver name to setup")
-def config(data_driver: str):
-    """
-        Setup data driver for ip storage
-        todo
-    """
-    if data_driver is None:
-        ddm = DataDriverManager()
-        ddm.print_available_drivers()
-    else:
-        ddm = DataDriverManager(data_driver)
-        driver = ddm.get_driver()
-        driver.configure()
+cli = click.CommandCollection(sources=[cli_run])
 
 
 @cli_run.command()
