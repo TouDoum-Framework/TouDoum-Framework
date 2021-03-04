@@ -1,7 +1,6 @@
 from django.http import JsonResponse, HttpRequest
 from django.views.decorators.csrf import csrf_exempt
-
-from core.utils import load_data, EventName
+from server.core import TokenAuthentication
 from server.api.models import *
 
 
@@ -12,20 +11,28 @@ def index(request: HttpRequest):
 
 @csrf_exempt
 def worker(request: HttpRequest):
-    return JsonResponse({}, safe=False)
+    if TokenAuthentication.is_token_valid(request):
+        return JsonResponse({}, safe=False)
+    else:
+        return TokenAuthentication.error()
 
 
 def config(request: HttpRequest):
-    return JsonResponse(None, safe=False)
+    if TokenAuthentication.is_token_valid(request):
+        return JsonResponse({}, safe=False)
+    else:
+        return TokenAuthentication.error()
 
 
-def config_get(request: HttpRequest, ver: int):
-    return JsonResponse(ver, safe=False)
-
-
-def config_get_plugin(request: HttpRequest, ver: int, plugin: str):
-    return JsonResponse(None, safe=False)
+def config_get_plugin(request: HttpRequest, plugin: str):
+    if TokenAuthentication.is_token_valid(request):
+        return JsonResponse({}, safe=False)
+    else:
+        return TokenAuthentication.error()
 
 
 def addr(request: HttpRequest):
-    return JsonResponse(None, safe=False)
+    if TokenAuthentication.is_token_valid(request):
+        return JsonResponse({}, safe=False)
+    else:
+        return TokenAuthentication.error()

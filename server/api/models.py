@@ -22,15 +22,13 @@ class Worker(models.Model):
 
 class Addr(models.Model):
     ip = models.CharField(max_length=32)
-    ipType = models.IntegerField()  # 4 or 6
     rescanPriority = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.ip
 
 
-class LogEvent(models.Model):
-    worker = models.ForeignKey(Worker, on_delete=models.DO_NOTHING)
+class AddrEvent(models.Model):
     ip = models.ForeignKey(Addr, on_delete=models.DO_NOTHING)
     status = models.CharField(max_length=64)
     createdAt = models.DateTimeField(auto_now=True)
