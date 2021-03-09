@@ -2,11 +2,9 @@ class Plugin:
 
     name = ""         # give a name to plugin
     description = ""  # describe what do this plugin
-    author = ""       # your name here
+    version = ""      # version of plugin
     protocol = ""     # "TCP" "UDP" or "TCP|UDP"
-
-    def __init__(self):
-        pass
+    author = ""       # your name here
 
     def scan(self):
         pass
