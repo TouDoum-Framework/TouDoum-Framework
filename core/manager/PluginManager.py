@@ -17,12 +17,14 @@ var_require_plugin = [
 
 class PluginManager:
     plugins: list = []
+    error: list = []
     plugin_list_for_load = []
 
     # @arg plugin_list : list of plugin to load
-    def __init__(self, plugin_list: str = "-"):
-        self.plugin_list_for_load = plugin_list.split(',')
-        self.load()
+    def __init__(self, plugin_list: str = None):
+        if plugin_list is not None:
+            self.plugin_list_for_load = plugin_list.split(',')
+            self.load()
 
     # Load and initialise all plugin in plugins directory
     def load(self):
@@ -39,13 +41,17 @@ class PluginManager:
                     if len(set(obj_content) & set(var_require_plugin)) == 5:
                         self.plugins.append(obj)
                     else:
-                        print("Error the '" + plugin_name +
-                              "' plugin does not contain the required information to be correctly loaded")
+                        self.error.append("Error the '" + plugin_name +
+                                          "' plugin does not contain the required information to be correctly loaded")
                 else:
-                    print("Error the '" + plugin_name +
-                          "' plugin does not contain the required functions to be correctly loaded")
+                    self.error.append("Error the '" + plugin_name +
+                                      "' plugin does not contain the required functions to be correctly loaded")
+                for err in self.error:
+                    print(err)
 
-    def reload(self, plugin_list: str = "-"):
-        self.plugins = []
-        self.plugin_list_for_load = plugin_list.split(',')
-        self.load()
+    def reload(self, plugin_list: str = None):
+        self.plugins.clear()
+        self.error.clear()
+        if plugin_list is not None:
+            self.plugin_list_for_load = plugin_list.split(',')
+            self.load()
