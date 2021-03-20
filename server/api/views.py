@@ -3,7 +3,7 @@ import json
 from django.http import JsonResponse, HttpRequest
 from django.views.decorators.csrf import csrf_exempt
 
-from server.api.utils import getLastConfig
+from server.api.utils import last_config, get_last_config
 from server.core import TokenAuthentication, ErrorCode
 from server.api.models import *
 
@@ -16,25 +16,21 @@ def index(request: HttpRequest):
 @csrf_exempt
 def worker(request: HttpRequest):
     if TokenAuthentication.is_token_valid(request):
-
         if request.method == 'POST':
-            worker_obj: Worker = Worker.objects.last()
             data = json.loads(request.body)
+            worker_obj: Worker = Worker.objects.filter(uuid=data['hostname']).last()
             if worker_obj is None:
                 new_worker = Worker()
                 new_worker.uuid = data['hostname']
+                new_worker.currentConfig = get_last_config()
                 new_worker.save()
+                return last_config()
 
-            return JsonResponse(getLastConfig(), safe=False)
+            worker_obj.currentConfig = get_last_config()
+            worker_obj.save()
+            return last_config()
         else:
             return ErrorCode.badMethod()
-    else:
-        return TokenAuthentication.error()
-
-
-def config(request: HttpRequest):
-    if TokenAuthentication.is_token_valid(request):
-        return JsonResponse(getLastConfig(), safe=False)
     else:
         return TokenAuthentication.error()
 

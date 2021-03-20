@@ -4,7 +4,12 @@ from server.api.models import Config
 from server.core import ErrorCode
 
 
-def getLastConfig():
+def get_last_config():
+    config_obj: Config = Config.objects.last()
+    return config_obj
+
+
+def last_config() -> JsonResponse:
     config_obj: Config = Config.objects.last()
     if config_obj is None:
         return ErrorCode.NoneConfigExist()
@@ -15,4 +20,4 @@ def getLastConfig():
         'skipPrivate': config_obj.skipPrivate,
         'timeout': config_obj.timeout
     }
-    return reply_config
+    return JsonResponse(reply_config, safe=False)
