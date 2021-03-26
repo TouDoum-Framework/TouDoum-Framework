@@ -15,8 +15,8 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col">
-                                        <h5 class="card-title text-uppercase text-muted mb-0">Traffic</h5>
-                                        <span class="h2 font-weight-bold mb-0">350,897</span>
+                                        <h5 class="card-title text-uppercase text-muted mb-0">Totals ip</h5>
+                                        <span class="h2 font-weight-bold mb-0">{{ ip }}</span>
                                     </div>
                                     <div class="col-auto">
                                         <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
@@ -24,10 +24,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <p class="mt-3 mb-0 text-muted text-sm">
-                                    <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                                    <span class="text-nowrap">Since last month</span>
-                                </p>
                             </div>
                         </div>
                     </div>
@@ -36,8 +32,8 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col">
-                                        <h5 class="card-title text-uppercase text-muted mb-0">New users</h5>
-                                        <span class="h2 font-weight-bold mb-0">2,356</span>
+                                        <h5 class="card-title text-uppercase text-muted mb-0">Config Version</h5>
+                                        <span class="h2 font-weight-bold mb-0"> {{ configVer }}</span>
                                     </div>
                                     <div class="col-auto">
                                         <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
@@ -45,10 +41,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <p class="mt-3 mb-0 text-muted text-sm">
-                                    <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 3.48%</span>
-                                    <span class="text-nowrap">Since last week</span>
-                                </p>
                             </div>
                         </div>
                     </div>
@@ -57,8 +49,8 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col">
-                                        <h5 class="card-title text-uppercase text-muted mb-0">Sales</h5>
-                                        <span class="h2 font-weight-bold mb-0">924</span>
+                                        <h5 class="card-title text-uppercase text-muted mb-0">Plugin Total</h5>
+                                        <span class="h2 font-weight-bold mb-0">{{ pluginTotal }}</span>
                                     </div>
                                     <div class="col-auto">
                                         <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
@@ -66,10 +58,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <p class="mt-3 mb-0 text-muted text-sm">
-                                    <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> 1.10%</span>
-                                    <span class="text-nowrap">Since yesterday</span>
-                                </p>
                             </div>
                         </div>
                     </div>
@@ -167,7 +155,7 @@
                     <div class="card-header border-0">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h3 class="mb-0">Page visits</h3>
+                                <h3 class="mb-0">Last scan result</h3>
                             </div>
                             <div class="col text-right">
                                 <a href="#!" class="btn btn-sm btn-primary">See all</a>
@@ -179,83 +167,29 @@
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
                             <tr>
-                                <th scope="col">Page name</th>
-                                <th scope="col">Visitors</th>
-                                <th scope="col">Unique users</th>
-                                <th scope="col">Bounce rate</th>
+                                <th scope="col">Ip</th>
+                                <th scope="col">Worker</th>
+                                <th scope="col">Result</th>
+                                <th scope="col">Config Ver</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <th scope="row">
-                                    /argon/
-                                </th>
-                                <td>
-                                    4,569
-                                </td>
-                                <td>
-                                    340
-                                </td>
-                                <td>
-                                    <i class="fas fa-arrow-up text-success mr-3"></i> 46,53%
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    /argon/index.html
-                                </th>
-                                <td>
-                                    3,985
-                                </td>
-                                <td>
-                                    319
-                                </td>
-                                <td>
-                                    <i class="fas fa-arrow-down text-warning mr-3"></i> 46,53%
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    /argon/charts.html
-                                </th>
-                                <td>
-                                    3,513
-                                </td>
-                                <td>
-                                    294
-                                </td>
-                                <td>
-                                    <i class="fas fa-arrow-down text-warning mr-3"></i> 36,49%
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    /argon/tables.html
-                                </th>
-                                <td>
-                                    2,050
-                                </td>
-                                <td>
-                                    147
-                                </td>
-                                <td>
-                                    <i class="fas fa-arrow-up text-success mr-3"></i> 50,87%
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    /argon/profile.html
-                                </th>
-                                <td>
-                                    1,795
-                                </td>
-                                <td>
-                                    190
-                                </td>
-                                <td>
-                                    <i class="fas fa-arrow-down text-danger mr-3"></i> 46,53%
-                                </td>
-                            </tr>
+                                {% for r in result %}
+                                    <tr>
+                                    <th scope="row">
+                                        {{ r.ip.ip }}
+                                    </th>
+                                    <td>
+                                        {{ r.worker.uuid }}
+                                    </td>
+                                    <td>
+                                        {{ r.result }}
+                                    </td>
+                                    <td>
+                                        {{ r.configVer.id }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>

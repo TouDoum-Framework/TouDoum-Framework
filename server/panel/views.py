@@ -7,11 +7,22 @@ from django.template import loader
 from django.http import HttpResponse, HttpRequest
 from django import template
 
+from core.manager.PluginManager import PluginManager
+
+from server.api.models import *
+
 
 @login_required(login_url="/")
 def index(request: HttpRequest):
+
+    pm = PluginManager()
+    pm.reload()
+
     context = {}
-    context['segment'] = 'index'
+    context['ip'] = Addr.objects.all().count()
+    context['configVer'] = Config.objects.last().pk
+    context['pluginTotal'] = len(PluginManager.plugins)
+    context['result'] = ScanResult.objects.all().order_by("createdAt")[0:50]
 
     html_template = loader.get_template('panel/index.html')
     return HttpResponse(html_template.render(context, request))
