@@ -6,9 +6,7 @@ class Plugin:
     description = "scan and use ntp vulnerable server for amp attack"
     author = "@Msterhuj"
     protocol = "UDP"
-
-    def __init__(self):
-        pass
+    version = "v1"
 
     def scan(self, ip: str, timeout: int):
         c = ntplib.NTPClient()

@@ -44,9 +44,7 @@ class Plugin:
     description = "scan and use dns vulnerable server for amp attack"
     author = "@Msterhuj"
     protocol = "UDP"
-
-    def __init__(self):
-        pass
+    version = "v1"
 
     def scan(self, ip: str, timeout: int, domain_name="www.google.com"):
         # replace 8.8.8.8 with your server IP!

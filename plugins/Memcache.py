@@ -6,9 +6,8 @@ class Plugin:
     description = "scan and use memcache vulnerable server for amp attack"
     author = "@Msterhuj"
     protocol = "UDP"
+    version = "v1"
 
-    def __init__(self):
-        pass
 
     def scan(self, ip: str, timeout: int):
         client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
