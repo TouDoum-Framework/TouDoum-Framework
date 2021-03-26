@@ -8,7 +8,7 @@ class Config(models.Model):
     createdAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.id)
+        return str((self.id, self.skipPrivate, self.timeout))
 
 
 class Worker(models.Model):
@@ -17,15 +17,16 @@ class Worker(models.Model):
     createdAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.uuid
+        return str((self.uuid, self.currentConfig))
 
 
 class Addr(models.Model):
     ip = models.CharField(max_length=32)
     rescanPriority = models.IntegerField(blank=True, null=True)
+    lastUpdate = models.DateTimeField()
 
     def __str__(self):
-        return self.ip
+        return str((self.ip, self.rescanPriority))
 
 
 class AddrEvent(models.Model):
@@ -34,7 +35,7 @@ class AddrEvent(models.Model):
     createdAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.id)
+        return str((self.ip.ip, self.status))
 
 
 class ScanResult(models.Model):
@@ -45,4 +46,4 @@ class ScanResult(models.Model):
     createdAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.result
+        return str((self.worker.uuid, self.ip.ip, self.configVer.id))

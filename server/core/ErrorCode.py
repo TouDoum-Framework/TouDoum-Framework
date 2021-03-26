@@ -7,3 +7,7 @@ def badMethod():
 
 def NoneConfigExist():
     return JsonResponse({"error": "no config exist"}, safe=False, status=501)
+
+
+def PluginDoesNotExist():
+    return JsonResponse({"error": "plugin does not exist"}, safe=False, status=404)

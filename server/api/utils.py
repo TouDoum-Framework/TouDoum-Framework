@@ -16,7 +16,7 @@ def last_config() -> JsonResponse:
 
     reply_config = {
         'id': config_obj.id,
-        'pluginEnabled': config_obj.pluginEnabled,
+        'plugins': config_obj.pluginEnabled.split(","),
         'skipPrivate': config_obj.skipPrivate,
         'timeout': config_obj.timeout
     }
