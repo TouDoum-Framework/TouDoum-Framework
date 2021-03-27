@@ -8,9 +8,7 @@ from server.panel import views
 urlpatterns = [
 
     path('', views.index, name='panel_index'),
-
-    # The home page
-    path('', views.old_index, name='home'),
+    path('addr', views.addr, name="panel_addr"),
 
     # Matches any html file
     re_path(r'^.*\.*', views.old_pages, name='pages'),

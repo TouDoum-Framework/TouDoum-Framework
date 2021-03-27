@@ -21,9 +21,9 @@ class Worker(models.Model):
 
 
 class Addr(models.Model):
-    ip = models.CharField(max_length=32)
-    rescanPriority = models.IntegerField(blank=True, null=True)
-    lastUpdate = models.DateTimeField()
+    ip = models.CharField(unique=True, max_length=32)
+    rescanPriority = models.IntegerField(blank=True, default=0)
+    lastUpdate = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return str((self.ip, self.rescanPriority))

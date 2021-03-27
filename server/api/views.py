@@ -58,7 +58,7 @@ def addr(request: HttpRequest):
                     if e.status == "free":
 
                         ip.lastUpdate = datetime.now()
-                        ip.rescanPriority = None
+                        ip.rescanPriority = 0
                         ip.save()
 
                         newEvent = AddrEvent()
@@ -72,7 +72,7 @@ def addr(request: HttpRequest):
             data = json.loads(request.body)
 
             ip = Addr.objects.filter(ip=data["ip"]).last()
-            ip.rescanPriority = None
+            ip.rescanPriority = 0
 
             newEvent = AddrEvent()
             newEvent.ip = ip
