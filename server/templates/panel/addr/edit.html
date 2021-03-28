@@ -1,0 +1,63 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Panel {% endblock title %}
+
+{% block content %}
+
+    {% include "includes/header.html" %}
+
+    <div class="container-fluid mt--7">
+
+        <div class="row mt-5">
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ ip }} Not found !
+                </div>
+            {% endif%}
+            <div class="col-xl-8 mb-5 mb-xl-0">
+                <div class="card shadow">
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="mb-0">All ip ordered by date</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Ip</th>
+                                <th scope="col">Rescan Priority</th>
+                                <th scope="col">Last Update</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for a in addrs %}
+                                <tr>
+                                    <th scope="row">
+                                        {{ a.ip }}
+                                    </th>
+                                    <td>
+                                        {{ a.rescanPriority }}
+                                    </td>
+                                    <td>
+                                        {{ a.lastUpdate }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% include "includes/footer.html" %}
+
+    </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}

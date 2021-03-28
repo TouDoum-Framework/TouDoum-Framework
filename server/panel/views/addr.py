@@ -1,48 +1,16 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
-from datetime import datetime
-
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.template import loader
-from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
+from django.http import HttpRequest
 from django.shortcuts import render
-from django import template
 
 import iptools
 
-from core.manager.PluginManager import PluginManager
-
 from server.api.models import *
 from server.panel.forms.addr import AddAddrForm
-
-
-def getHeaderData() -> dict:
-    context = {
-        'ip': Addr.objects.all().count(),
-        'pluginTotal': len(PluginManager.plugins),
-        'resultTotal': ScanResult.objects.all().count(),
-    }
-    try:
-        context['configVer'] = Config.objects.last().pk
-    except AttributeError:
-        context['configVer'] = None
-    return context
+from server.panel.views_base import getHeaderData
 
 
 @login_required(login_url="/")
-def index(request: HttpRequest):
-    pm = PluginManager()
-    pm.reload()
-
-    context = getHeaderData()
-    context['result'] = ScanResult.objects.all().order_by("createdAt")[0:50]
-
-    return render(request, 'panel/index.html', context)
-
-
 def addr(request: HttpRequest):
     context = getHeaderData()
 
@@ -93,24 +61,16 @@ def addr(request: HttpRequest):
 
 
 @login_required(login_url="/")
-def old_pages(request):
-    context = {}
-    # All resource paths end in .html.
-    # Pick out the html file name from the url. And load that template.
-    try:
+def edit(request: HttpRequest, ip: str):
+    context = getHeaderData()
 
-        load_template = request.path.split('/')[-1]
-        context['segment'] = load_template
+    addr: Addr = Addr.objects.filter(ip=ip).last()
 
-        html_template = loader.get_template(load_template)
-        return HttpResponse(html_template.render(context, request))
+    context['ip'] = ip
 
-    except template.TemplateDoesNotExist:
+    if addr is None:
+        context['error'] = "Ip not fond"
+    else:
+        context['addr'] = addr
 
-        html_template = loader.get_template('page-404.html')
-        return HttpResponse(html_template.render(context, request))
-
-    except:
-
-        html_template = loader.get_template('page-500.html')
-        return HttpResponse(html_template.render(context, request))
+    return render(request, 'panel/addr/edit.html', context)
