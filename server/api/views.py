@@ -50,7 +50,7 @@ def addr(request: HttpRequest):
     if TokenAuthentication.is_token_valid(request):
         if request.method == 'GET':
 
-            ips = Addr.objects.all().order_by("rescanPriority", "-lastUpdate")[0:10]
+            ips = Addr.objects.all().order_by("-rescanPriority", "lastUpdate")[0:10]
             for ip in ips:
                 print(ip.ip)
                 event = AddrEvent.objects.all().filter(ip=ip).order_by("createdAt")[0:5]
