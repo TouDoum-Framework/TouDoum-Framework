@@ -2,28 +2,41 @@
 """
 Copyright (c) 2019 - present AppSeed.us
 """
+from datetime import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.template import loader
 from django.http import HttpResponse, HttpRequest
+from django.shortcuts import render
 from django import template
+
+from core.manager.PluginManager import PluginManager
+
+from server.api.models import *
+
+
+def getHeaderData() -> dict:
+    context = {
+        'ip': Addr.objects.all().count(),
+        'pluginTotal': len(PluginManager.plugins),
+        'resultTotal': ScanResult.objects.all().count(),
+    }
+    try:
+        context['configVer'] = Config.objects.last().pk
+    except AttributeError:
+        context['configVer'] = None
+    return context
 
 
 @login_required(login_url="/")
 def index(request: HttpRequest):
-    context = {}
-    context['segment'] = 'index'
+    pm = PluginManager()
+    pm.reload()
 
-    html_template = loader.get_template('panel/index.html')
-    return HttpResponse(html_template.render(context, request))
+    context = getHeaderData()
+    context['result'] = ScanResult.objects.all().order_by("createdAt")[0:50]
 
-
-@login_required(login_url="/")
-def old_index(request):
-    context = {}
-    context['segment'] = 'index'
-
-    html_template = loader.get_template('index.html')
-    return HttpResponse(html_template.render(context, request))
+    return render(request, 'panel/index.html', context)
 
 
 @login_required(login_url="/")
