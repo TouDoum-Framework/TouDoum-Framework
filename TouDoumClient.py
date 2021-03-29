@@ -62,9 +62,11 @@ class Client:
 
 
 if __name__ == '__main__':
-    if os.environ.get("PROD") is None:
+    if os.environ.get("MODE") is None:
         load_dotenv(".env")
         print("Load env from .env file")
+    else:
+        print("Not using .env file")
 
     client = Client()
     client.loop()

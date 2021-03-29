@@ -12,10 +12,13 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 from dotenv import load_dotenv
+from decouple import config
 
-if os.environ.get("PROD") is None:
+if os.environ.get("MODE") is None:
     load_dotenv(".env")
     print("Load env from .env file")
+else:
+    print("Not using .env file")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,12 +27,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = config('SECRET_KEY', default="No_U")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = str(config('ALLOWED_HOSTS', default="127.0.0.1,localhost")).split(',')
 
 # Application definition
 
@@ -81,11 +84,11 @@ WSGI_APPLICATION = 'server.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get("POSTGRES_DB"),
-        'USER': os.environ.get("POSTGRES_USER"),
-        'PASSWORD': os.environ.get("POSTGRES_PASSWORD"),
-        'HOST': os.environ.get("POSTGRES_HOST"),
-        'PORT': int(os.environ.get("POSTGRES_PORT"))
+        'NAME': config('POSTGRES_DB', default="TouDoum"),
+        'USER': config("POSTGRES_USER", default="please"),
+        'PASSWORD': config("POSTGRES_PASSWORD", default="change_me"),
+        'HOST': config("POSTGRES_HOST", default="postgres"),
+        'PORT': config("POSTGRES_PORT", default="5432", cast=int)
     }
 }
 
@@ -112,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = config('TIME_ZONE', default="UTC")
 
 USE_I18N = True
 
@@ -120,10 +123,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 4228250625
+DATA_UPLOAD_MAX_NUMBER_FIELDS = config('DATA_UPLOAD_MAX_NUMBER_FIELDS', default="4228250625", cast=int)
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'server/static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'server/static'),
+    #os.path.join(BASE_DIR, 'server/static'),
 )

@@ -4,7 +4,10 @@ services:
 
   postgres:
     image: postgres
-    env_file: .env
+    environment:
+      - POSTGRES_DB=TouDoum
+      - POSTGRES_USER=please
+      - POSTGRES_PASSWORD=change_me
     ports:
       - 5432:5432
     volumes:
@@ -14,9 +17,19 @@ services:
     image: msterhuj/toudoum
     depends_on:
       - postgres
-    env_file: .env
     environment:
       - MODE=master
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=TouDoum
+      - POSTGRES_USER=please
+      - POSTGRES_PASSWORD=change_me
+      - DJANGO_SUPERUSER_USERNAME="please"
+      - DJANGO_SUPERUSER_PASSWORD="change_me"
+      - DJANGO_SUPERUSER_EMAIL="no.seriously@change.me"
+      - ALLOWED_HOSTS=127.0.0.1,localhost
+      - SECRET_KEY=No_U
+      - TOKEN="Youwouuuu"
     ports:
       - 8000:8000
 
@@ -24,6 +37,7 @@ services:
     image: msterhuj/toudoum
     depends_on:
       - master
-    env_file: .env
     environment:
       - MODE=worker
+      - API_URL="http://master:8000/api/v1"
+      - TOKEN="Youwouuuu"
