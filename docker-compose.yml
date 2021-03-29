@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.8'
 
 services:
 
@@ -15,6 +15,7 @@ services:
 
   master:
     image: msterhuj/toudoum
+    build: .
     depends_on:
       - postgres
     environment:
@@ -24,20 +25,18 @@ services:
       - POSTGRES_DB=TouDoum
       - POSTGRES_USER=please
       - POSTGRES_PASSWORD=change_me
-      - DJANGO_SUPERUSER_USERNAME="please"
-      - DJANGO_SUPERUSER_PASSWORD="change_me"
-      - DJANGO_SUPERUSER_EMAIL="no.seriously@change.me"
-      - ALLOWED_HOSTS=127.0.0.1,localhost
       - SECRET_KEY=No_U
-      - TOKEN="Youwouuuu"
+      - TOKEN="no.seriously.change.me"
+      - ALLOWED_HOSTS=127.0.0.1,localhost
     ports:
       - 8000:8000
 
   worker:
     image: msterhuj/toudoum
+    build: .
     depends_on:
       - master
     environment:
       - MODE=worker
       - API_URL="http://master:8000/api/v1"
-      - TOKEN="Youwouuuu"
+      - TOKEN="no.seriously.change.me"

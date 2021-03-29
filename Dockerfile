@@ -2,6 +2,8 @@ FROM python:3.8.5-buster
 
 LABEL MAINTAINER="gabin.lanore@gmail.com"
 
+RUN apt update && apt install netcat -y
+
 ENV SECRET_KEY="No_U"
 ENV TOKEN="Youwouuuu"
 ENV API_URL="http://127.0.0.1:8000/api/v1"

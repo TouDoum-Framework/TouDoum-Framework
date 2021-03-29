@@ -127,6 +127,4 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = config('DATA_UPLOAD_MAX_NUMBER_FIELDS', default=
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'server/static')
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    #os.path.join(BASE_DIR, 'server/static'),
-)
+STATICFILES_DIRS = ()
