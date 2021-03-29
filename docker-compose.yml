@@ -4,10 +4,26 @@ services:
 
   postgres:
     image: postgres
-    hostname: postgres
-    container_name: postgres
     env_file: .env
     ports:
       - 5432:5432
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
+
+  master:
+    image: msterhuj/toudoum
+    depends_on:
+      - postgres
+    env_file: .env
+    environment:
+      - MODE=master
+    ports:
+      - 8000:8000
+
+  worker:
+    image: msterhuj/toudoum
+    depends_on:
+      - master
+    env_file: .env
+    environment:
+      - MODE=worker

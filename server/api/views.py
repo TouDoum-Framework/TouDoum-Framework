@@ -4,7 +4,7 @@ from datetime import datetime
 from django.http import JsonResponse, HttpRequest, FileResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from core.manager.PluginManager import PluginManager
+from server.core.PluginManager import PluginManager
 
 from server.api.utils import last_config, get_last_config
 from server.core import TokenAuthentication, ErrorCode
