@@ -125,6 +125,8 @@ USE_TZ = True
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = config('DATA_UPLOAD_MAX_NUMBER_FIELDS', default="4228250625", cast=int)
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'server/static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'server/staticfiles')
 STATIC_URL = '/static/'
-STATICFILES_DIRS = ()
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'server/static'),
+)
