@@ -1,0 +1,7 @@
+venv/
+.env
+.git/
+docker-compose.yml
+Dockerfile
+docs/
+README.md

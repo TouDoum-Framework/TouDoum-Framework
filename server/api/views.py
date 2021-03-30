@@ -4,7 +4,7 @@ from datetime import datetime
 from django.http import JsonResponse, HttpRequest, FileResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from core.manager.PluginManager import PluginManager
+from server.core.PluginManager import PluginManager
 
 from server.api.utils import last_config, get_last_config
 from server.core import TokenAuthentication, ErrorCode
@@ -50,7 +50,7 @@ def addr(request: HttpRequest):
     if TokenAuthentication.is_token_valid(request):
         if request.method == 'GET':
 
-            ips = Addr.objects.all().order_by("rescanPriority", "-lastUpdate")[0:10]
+            ips = Addr.objects.all().order_by("-rescanPriority", "lastUpdate")[0:10]
             for ip in ips:
                 print(ip.ip)
                 event = AddrEvent.objects.all().filter(ip=ip).order_by("createdAt")[0:5]

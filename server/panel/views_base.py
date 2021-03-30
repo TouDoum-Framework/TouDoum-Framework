@@ -2,7 +2,6 @@
 """
 Copyright (c) 2019 - present AppSeed.us
 """
-from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.template import loader
@@ -10,7 +9,7 @@ from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 from django import template
 
-from core.manager.PluginManager import PluginManager
+from server.core.PluginManager import PluginManager
 
 from server.api.models import *
 

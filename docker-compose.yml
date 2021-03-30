@@ -4,10 +4,39 @@ services:
 
   postgres:
     image: postgres
-    hostname: postgres
-    container_name: postgres
-    env_file: .env
+    environment:
+      - POSTGRES_DB=TouDoum
+      - POSTGRES_USER=please
+      - POSTGRES_PASSWORD=change_me
     ports:
       - 5432:5432
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
+
+  master:
+    image: msterhuj/toudoum
+    build: .
+    depends_on:
+      - postgres
+    environment:
+      - MODE=master
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=TouDoum
+      - POSTGRES_USER=please
+      - POSTGRES_PASSWORD=change_me
+      - SECRET_KEY=No_U
+      - TOKEN="no.seriously.change.me"
+      - ALLOWED_HOSTS=127.0.0.1,localhost
+    ports:
+      - 8000:8000
+
+  worker:
+    image: msterhuj/toudoum
+    build: .
+    depends_on:
+      - master
+    environment:
+      - MODE=worker
+      - API_URL="http://master:8000/api/v1"
+      - TOKEN="no.seriously.change.me"
