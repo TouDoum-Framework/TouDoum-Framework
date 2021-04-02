@@ -5,19 +5,11 @@
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>{% block title %}{% endblock %} | TouDoum-Framework</title>
-        <link href="{% static 'assets/img/brand/favicon.png' %}" rel="icon" type="image/png">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-        <link href="{% static 'assets/../../static/assets/js/plugins/nucleo/css/nucleo.css' %}" rel="stylesheet"/>
-        <link href="{% static 'assets/../../static/assets/js/plugins/@fortawesome/fontawesome-free/css/all.min.css' %}" rel="stylesheet"/>
-        <link href="{% static 'assets/css/argon-dashboard.min.css' %}" rel="stylesheet"/>
+        {% include "includes/stylesheet.html" %}
         {% block stylesheets %}{% endblock stylesheets %}
     </head>
     <body>
-        {% include "includes/sidenav.html" %}
-        <div class="main-content">
-            {% include "includes/navigation.html" %}
-            {% block content %}{% endblock content %}
-        </div>
+        {% block content %}{% endblock %}
         {% include "includes/scripts.html" %}
         {% block javascripts %}{% endblock javascripts %}
     </body>
