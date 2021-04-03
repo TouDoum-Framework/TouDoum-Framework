@@ -16,16 +16,21 @@ class Api:
         print("Try to register client")
         headers = {'Authorization': self.token}
         data = {"hostname": hostname}
-        reply = requests.post(self.url + "/worker", json=data, headers=headers)
-        if reply.status_code == 501:
-            print("Client registered, but no config return by master waiting 60s and retry")
+        try:
+            reply = requests.post(self.url + "/worker", json=data, headers=headers)
+            if reply.status_code == 501:
+                print("Client registered, but no config return by master waiting 60s and retry")
+                time.sleep(60)
+                self.register(hostname)
+            elif reply.status_code == 200:
+                print("Client registered and config hase been receives")
+                return json.loads(reply.text)
+            else:
+                return exit(-1)
+        except requests.exceptions.ConnectionError:
+            print("Enable to connect to master waiting 60s and retry")
             time.sleep(60)
             self.register(hostname)
-        elif reply.status_code == 200:
-            print("Client registered and config hase been receives")
-            return json.loads(reply.text)
-        else:
-            return exit(-1)
 
     def download(self, download: list):
         for plugin in download:
