@@ -4,6 +4,7 @@ services:
 
   postgres:
     image: postgres
+    restart: always
     environment:
       - POSTGRES_DB=TouDoum
       - POSTGRES_USER=please
@@ -13,11 +14,23 @@ services:
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
 
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=please
+      - MONGO_INITDB_ROOT_PASSWORD=change_me
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data/mongo:/data/db/
+
   master:
     image: msterhuj/toudoum
     build: .
     depends_on:
       - postgres
+      - mongo
     environment:
       - MODE=master
       - POSTGRES_HOST=postgres
