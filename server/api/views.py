@@ -49,9 +49,12 @@ def config_get_plugin(request: HttpRequest, plugin: str):
 @csrf_exempt
 def addr(request: HttpRequest):
     if TokenAuthentication.is_token_valid(request):
+        config = last_config()
         if request.method == 'GET':
-
-            ip = Addr.objects.all().filter(used=False).order_by("-rescanPriority", "lastUpdate").first()
+            if config["skipPrivate"]:
+                ip = Addr.objects.all().filter(used=False).order_by("-rescanPriority", "lastUpdate").first()
+            else:
+                ip = Addr.objects.all().filter(used=False, isPrivate=False).order_by("-rescanPriority", "lastUpdate").first()
             ip.lastUpdate = datetime.now()
             ip.rescanPriority = 0
             ip.used = True
@@ -73,6 +76,6 @@ def addr(request: HttpRequest):
 
         else:
             return ErrorCode.badMethod()
-        return last_config()
+        return config
     else:
         return TokenAuthentication.error()
