@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from server.core.PluginManager import PluginManager
 
 from server.api.utils import last_config, get_last_config
-from server.core import TokenAuthentication, ErrorCode
+from server.api import TokenAuthentication, ErrorCode
 from server.core.ResultManager import ResultManger
 from server.api.models import Addr, Worker
 

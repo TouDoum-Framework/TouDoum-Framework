@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 
 from server.api.models import Config
-from server.core import ErrorCode
+from server.api import ErrorCode
 
 
 def get_last_config():
