@@ -14,6 +14,8 @@ import os
 from dotenv import load_dotenv
 from decouple import config
 
+from server.core import ModuleManager
+
 if os.environ.get("MODE") is None:
     load_dotenv(".env")
     print("Load env from .env file")
@@ -46,7 +48,7 @@ INSTALLED_APPS = [
     'server.api',
     'server.panel',
     'server.authentication'
-]
+] + ModuleManager.loadModules()
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
