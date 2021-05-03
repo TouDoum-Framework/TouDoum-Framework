@@ -44,6 +44,7 @@ services:
       - POSTGRES_DB=TouDoum
       - POSTGRES_USER=please
       - POSTGRES_PASSWORD=change_me
+      - MONGO_HOST=mongo
       - MONGO_USER=please
       - MONGO_PASS=change_me
       - REDIS_URL="redis://127.0.0.1:6379/1"
