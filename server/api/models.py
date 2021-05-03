@@ -11,7 +11,7 @@ ip_private = IpRangeList(
 
 class Config(models.Model):
     pause = models.BooleanField(default=False)
-    pluginEnabled = models.TextField()
+    modulesEnabled = models.TextField()
     skipPrivate = models.BooleanField(default=True)
     timeout = models.IntegerField()
     createdAt = models.DateTimeField(auto_now=True)
