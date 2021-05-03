@@ -4,12 +4,13 @@ from datetime import datetime
 from django.http import JsonResponse, HttpRequest, FileResponse
 from django.views.decorators.csrf import csrf_exempt
 
+from server.api.models import Config
 from server.core.PluginManager import PluginManager
 
-from server.api.utils import last_config, get_last_config
-from server.api import TokenAuthentication, ErrorCode
+from server.api import ErrorCode
 from server.core.ResultManager import ResultManger
-from server.api.models import Addr, Worker
+from server.api.models.models import Addr, Worker
+from server.core import TokenAuthentication
 
 
 @csrf_exempt
@@ -21,12 +22,12 @@ def worker(request: HttpRequest):
             if worker_obj is None:
                 new_worker = Worker()
                 new_worker.uuid = data['hostname']
-                new_worker.currentConfig = get_last_config()
+                new_worker.currentConfig = Config.get_last_config()
                 new_worker.save()
-                return last_config()
-            worker_obj.currentConfig = get_last_config()
+                return Config.last_config()
+            worker_obj.currentConfig = Config.get_last_config()
             worker_obj.save()
-            return last_config()
+            return Config.last_config()
         else:
             return ErrorCode.badMethod()
     else:
@@ -46,15 +47,23 @@ def config_get_plugin(request: HttpRequest, plugin: str):
         return TokenAuthentication.error()
 
 
+def modules_discovery(request: HttpRequest):
+    if TokenAuthentication.is_token_valid(request):
+        return JsonResponse([], safe=False)
+    else:
+        return TokenAuthentication.error()
+
+
 @csrf_exempt
 def addr(request: HttpRequest):
     if TokenAuthentication.is_token_valid(request):
-        config = last_config()
+        config = Config.last_config()
         if request.method == 'GET':
             if config["skipPrivate"]:
                 ip = Addr.objects.all().filter(used=False).order_by("-rescanPriority", "lastUpdate").first()
             else:
-                ip = Addr.objects.all().filter(used=False, isPrivate=False).order_by("-rescanPriority", "lastUpdate").first()
+                ip = Addr.objects.all().filter(used=False, isPrivate=False).order_by("-rescanPriority",
+                                                                                     "lastUpdate").first()
             ip.lastUpdate = datetime.now()
             ip.rescanPriority = 0
             ip.used = True
