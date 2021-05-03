@@ -3,11 +3,11 @@ from importlib import import_module
 import re
 
 
-def loadModules() -> list:
+def load_modules() -> list:
     return [module.replace("/", ".") for module in glob("server/modules/*")]
 
 
-def getUrls(t: str) -> list:
+def get_urls(t: str) -> list:
     urls = []
     for module_dir in glob("server/modules/*/urls.py"):
         module_name = re.sub("server/modules/|/urls\.py", "", module_dir)
@@ -17,3 +17,10 @@ def getUrls(t: str) -> list:
         elif t == "panel":
             urls = urls + module.url_panel
     return urls
+
+
+def get_modules_name():
+    modules = []
+    for module_dir in glob("server/modules/*/urls.py"):
+        modules.append(re.sub("server/modules/|/urls\.py", "", module_dir))
+    return modules

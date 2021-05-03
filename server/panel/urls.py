@@ -8,4 +8,4 @@ urlpatterns = [
     path('', views_base.index, name='panel_index'),
     path('addr', addr_views.addr, name='panel_addr'),
     path('addr/<str:ip>', addr_views.edit, name='panel_addr_edit'),
-] + ModuleManager.getUrls("panel")
+] + ModuleManager.get_urls("panel")

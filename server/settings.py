@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'server.api',
     'server.panel',
     'server.authentication'
-] + ModuleManager.loadModules()
+] + ModuleManager.load_modules()
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
