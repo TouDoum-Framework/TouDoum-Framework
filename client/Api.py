@@ -32,6 +32,9 @@ class Api:
             time.sleep(60)
             self.register(hostname)
 
+    def getmodules(self):
+        pass
+
     def download(self, download: list):
         for plugin in download:
             print("Downloading plugin " + plugin)

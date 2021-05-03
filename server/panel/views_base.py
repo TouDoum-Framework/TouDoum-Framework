@@ -9,7 +9,7 @@ from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 from django import template
 
-from server.core.PluginManager import PluginManager
+from server.modules.plugins.PluginManager import PluginManager
 
 from server.api.models.models import *
 

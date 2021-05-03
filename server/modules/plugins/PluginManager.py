@@ -25,9 +25,9 @@ class PluginManager:
 
     # Load and initialise all plugin in plugins directory
     def load(self):
-        for plugin_file in glob("./plugins/*.py"):
+        for plugin_file in glob("server/modules/plugins/*.py"):
 
-            plugin_name = re.sub("\./plugins/|\.py", "", plugin_file)
+            plugin_name = re.sub("server/modules/plugins/|\.py", "", plugin_file)
             module = importlib.import_module("plugins." + plugin_name, ".")
 
             obj = module.Plugin()

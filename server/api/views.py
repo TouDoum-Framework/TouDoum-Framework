@@ -1,11 +1,10 @@
 import json
 from datetime import datetime
 
-from django.http import JsonResponse, HttpRequest, FileResponse
+from django.http import JsonResponse, HttpRequest
 from django.views.decorators.csrf import csrf_exempt
 
 from server.api.models import Config
-from server.core.PluginManager import PluginManager
 
 from server.api import ErrorCode
 from server.core.ResultManager import ResultManger
@@ -34,26 +33,13 @@ def worker(request: HttpRequest):
         return TokenAuthentication.error()
 
 
-def config_get_plugin(request: HttpRequest, plugin: str):
-    if TokenAuthentication.is_token_valid(request):
-        pm = PluginManager()
-        for p in pm.plugins:
-            if plugin == p.name:
-                file = open("plugins/" + p.file + ".py", 'rb')
-                response = FileResponse(file)
-                return response
-        return ErrorCode.PluginDoesNotExist()
-    else:
-        return TokenAuthentication.error()
-
-
 def modules_discovery(request: HttpRequest):
     if TokenAuthentication.is_token_valid(request):
-        return JsonResponse([], safe=False)
+        return JsonResponse(Config.get_enabled_modules(), safe=False)
     else:
         return TokenAuthentication.error()
 
-
+# todo change save function look at notion.so dashboard
 @csrf_exempt
 def addr(request: HttpRequest):
     if TokenAuthentication.is_token_valid(request):
