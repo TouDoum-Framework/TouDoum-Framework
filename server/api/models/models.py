@@ -1,5 +1,6 @@
 from django.db import models
 from server.api.models.Config import Config
+from server.modules.models import Module
 
 
 class Worker(models.Model):
@@ -16,6 +17,7 @@ class Addr(models.Model):
     isPrivate = models.BooleanField(default=False)
     rescanPriority = models.IntegerField(blank=True, default=0)
     used = models.BooleanField(default=False)
+    modules = models.ManyToManyField(Module, blank=True)
     lastUpdate = models.DateTimeField(auto_now=True)
 
     def __str__(self):

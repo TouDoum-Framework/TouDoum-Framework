@@ -14,7 +14,7 @@ import os
 from dotenv import load_dotenv
 from decouple import config
 
-from server.core import ModuleManager
+from server.modules import ModuleManager
 
 if os.environ.get("MODE") is None:
     load_dotenv(".env")

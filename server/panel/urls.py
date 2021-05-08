@@ -1,6 +1,6 @@
 from django.urls import path
 
-from server.core import ModuleManager
+from server.modules import ModuleManager
 from server.panel import views_base
 from server.panel.views import addr as addr_views
 

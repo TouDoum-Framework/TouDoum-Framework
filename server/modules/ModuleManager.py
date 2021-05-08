@@ -2,7 +2,6 @@ from glob import glob
 from importlib import import_module
 import re
 
-
 def load_modules() -> list:
     return [module.replace("/", ".") for module in glob("server/modules/src/*")]
 
@@ -21,7 +20,4 @@ def get_urls(t: str) -> list:
 
 
 def get_modules_name():
-    modules = []
-    for module_dir in glob("server/modules/*/urls.py"):
-        modules.append(re.sub("server/modules/src/|/urls\.py", "", module_dir))
-    return modules
+    return [re.sub("server/modules/src/|/urls\.py", "", module_dir) for module_dir in glob("server/modules/*/urls.py")]
