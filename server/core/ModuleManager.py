@@ -4,14 +4,15 @@ import re
 
 
 def load_modules() -> list:
-    return [module.replace("/", ".") for module in glob("server/modules/*")]
+    return [module.replace("/", ".") for module in glob("server/modules/src/*")]
 
 
 def get_urls(t: str) -> list:
     urls = []
-    for module_dir in glob("server/modules/*/urls.py"):
-        module_name = re.sub("server/modules/|/urls\.py", "", module_dir)
-        module = import_module("server.modules." + module_name + ".urls", ".")
+    for module_dir in glob("server/modules/src/*/urls.py"):
+        module_name = re.sub("server/modules/src/|/urls\.py", "", module_dir)
+
+        module = import_module("server.modules.src." + module_name + ".urls", ".")
         if t == "api":
             urls = urls + module.url_api
         elif t == "panel":
@@ -22,5 +23,5 @@ def get_urls(t: str) -> list:
 def get_modules_name():
     modules = []
     for module_dir in glob("server/modules/*/urls.py"):
-        modules.append(re.sub("server/modules/|/urls\.py", "", module_dir))
+        modules.append(re.sub("server/modules/src/|/urls\.py", "", module_dir))
     return modules

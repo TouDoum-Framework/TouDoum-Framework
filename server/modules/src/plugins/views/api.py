@@ -2,7 +2,7 @@ from django.http import JsonResponse, HttpRequest, FileResponse
 
 from server.api import ErrorCode
 from server.core import TokenAuthentication
-from server.modules.plugins.PluginManager import PluginManager
+from server.modules.src.plugins.PluginManager import PluginManager
 
 
 def discovery(request: HttpRequest):

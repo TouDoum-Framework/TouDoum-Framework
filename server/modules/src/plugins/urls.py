@@ -1,5 +1,5 @@
 from django.urls import path
-from server.modules.plugins.views import api as api_views
+from server.modules.src.plugins.views import api as api_views
 
 url_api = [
     path('plugins/discovery', api_views.discovery),

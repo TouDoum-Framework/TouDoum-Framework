@@ -45,9 +45,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'server.cluster',
     'server.api',
     'server.panel',
-    'server.authentication'
+    'server.authentication',
+    'server.modules'
 ] + ModuleManager.load_modules()
 
 MIDDLEWARE = [

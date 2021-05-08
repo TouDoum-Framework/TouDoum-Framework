@@ -3,11 +3,12 @@ from django.core.cache import cache
 from django.db import models
 
 from server.api import ErrorCode
+from server.modules.models import Module
 
 
 class Config(models.Model):
     pause = models.BooleanField(default=False)
-    modulesEnabled = models.TextField()
+    modulesEnabled = models.ManyToManyField(Module)
     skipPrivate = models.BooleanField(default=True)
     timeout = models.IntegerField()
     createdAt = models.DateTimeField(auto_now=True)

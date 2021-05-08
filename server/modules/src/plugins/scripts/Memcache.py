@@ -8,7 +8,6 @@ class Plugin:
     protocol = "UDP"
     version = "v1"
 
-
     def scan(self, ip: str, timeout: int):
         client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         client.settimeout(timeout)
