@@ -10,6 +10,7 @@ from server.api import ErrorCode
 from server.core.ResultManager import ResultManger
 from server.api.models.models import Addr, Worker
 from server.core import TokenAuthentication
+from server.modules.apps import get_client_file, download_client_file
 
 
 @csrf_exempt
@@ -38,6 +39,15 @@ def modules_discovery(request: HttpRequest):
         return JsonResponse(Config.get_enabled_modules(), safe=False)
     else:
         return TokenAuthentication.error()
+
+@csrf_exempt
+def module_discovery_by_name(request: HttpRequest, module: str):
+    if request.method == "GET":
+        return JsonResponse(json.dumps(get_client_file(module)), safe=False)
+    elif request.method == "POST":
+        data = json.loads(request.body)
+        return download_client_file(module, data["file"])
+
 
 # todo change save function look at notion.so dashboard
 @csrf_exempt

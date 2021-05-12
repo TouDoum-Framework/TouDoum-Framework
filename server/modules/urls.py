@@ -1,4 +1,4 @@
-from server.modules.ModuleManager import syncDB
+from server.modules.apps import syncDB
 
 urlpatterns = []
 
