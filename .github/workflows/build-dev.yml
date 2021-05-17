@@ -3,7 +3,7 @@ name: Django Test & Build Workflow
 on:
   workflow_dispatch:
   push:
-    branches: [ develop ]
+    branches: [ develop, github-actions ]
 
 jobs:
   code-check:
@@ -47,14 +47,14 @@ jobs:
       - name: Install requirements
         run: pip install -r requirements.txt
 
-      - name: Install pycodestyle
-        run: pip install pycodestyle
+      #- name: Install pycodestyle
+      #  run: pip install pycodestyle
 
-      - name: Check Syntax of master
-        run: pycodestyle --statistics server/
+      #- name: Check Syntax of master
+      #  run: pycodestyle --statistics server/
 
-      - name: Check Syntax of client
-        run: pycodestyle --statistics client/
+      #- name: Check Syntax of client
+      #  run: pycodestyle --statistics client/
 
       - name: Run Make Migrations
         run: python manage.py makemigrations
