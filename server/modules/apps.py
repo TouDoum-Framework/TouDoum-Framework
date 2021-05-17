@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 from glob import glob
-from django.urls import path
+from django.urls import path, include
 from importlib import import_module
 import re
 
@@ -16,7 +16,7 @@ def load_modules() -> list:
 
 
 def get_modules_name() -> list:
-    return [re.sub("server/modules/src/|/urls\.py", "", module_dir) for module_dir in glob("server/modules/*/urls.py")]
+    return [re.sub("server/modules/src/|/apps.py", "", module_dir) for module_dir in glob("server/modules/*/apps.py")]
 
 
 def syncDB() -> None:
@@ -24,7 +24,7 @@ def syncDB() -> None:
     from server.cluster.urls import registerMaster
     master = registerMaster()
     for module_dir in glob("server/modules/src/*/apps.py"):
-        module_name = re.sub("server/modules/src/|/apps\.py", "", module_dir)
+        module_name = re.sub("server/modules/src/|/apps.py", "", module_dir)
         module = import_module("server.modules.src." + module_name + ".apps", ".")
         mod = Module.objects.filter(name=module.name).first()
         if mod is None:
@@ -35,12 +35,13 @@ def syncDB() -> None:
         mod.availableAt.add(master.pk)
 
 
-def get_urls(t: str) -> list:
+def get_urls(file: str) -> list:
+    print("Loading module for " + file)
     urls = []
-    for module_dir in glob("server/modules/src/*/urls.py"):
-        module_name = re.sub("server/modules/src/|/urls\.py", "", module_dir)
-        python_path = "server.modules.src." + module_name + ".urls"
-        urls += path(module_name, python_path)
+    for module_dir in glob("server/modules/src/*/urls/" + file + ".py"):
+        module_name = re.sub("server/modules/src/|/urls/[a-z]+.py", "", module_dir)
+        python_path = "server.modules.src." + module_name + ".urls." + file
+        urls.append(path('module/' + module_name + '/', include(python_path)))
     return urls
 
 
