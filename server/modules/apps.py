@@ -1,5 +1,6 @@
 from django.apps import AppConfig
 from glob import glob
+from django.urls import path
 from importlib import import_module
 import re
 
@@ -38,12 +39,8 @@ def get_urls(t: str) -> list:
     urls = []
     for module_dir in glob("server/modules/src/*/urls.py"):
         module_name = re.sub("server/modules/src/|/urls\.py", "", module_dir)
-
-        module = import_module("server.modules.src." + module_name + ".urls", ".")
-        if t == "api":
-            urls = urls + module.url_api
-        elif t == "panel":
-            urls = urls + module.url_panel
+        python_path = "server.modules.src." + module_name + ".urls"
+        urls += path(module_name, python_path)
     return urls
 
 
