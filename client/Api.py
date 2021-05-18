@@ -17,7 +17,7 @@ class Api:
         headers = {'Authorization': self.token}
         data = {"hostname": hostname}
         try:
-            reply = requests.post(self.url + "/worker", json=data, headers=headers)
+            reply = requests.post(self.url + "/register", json=data, headers=headers)
             if reply.status_code == 501:
                 print("Client registered, but no config return by master waiting 60s and retry")
                 time.sleep(60)
@@ -26,13 +26,15 @@ class Api:
                 print("Client registered and config hase been receives")
                 return json.loads(reply.text)
             else:
+                print("Return type error " + reply.status_code)
+                print("Check server logs")
                 return exit(-1)
         except requests.exceptions.ConnectionError:
             print("Enable to connect to master waiting 60s and retry")
             time.sleep(60)
             self.register(hostname)
 
-    def getmodules(self):
+    def get_modules_from_list(self, modules_name: list):
         pass
 
     def download(self, download: list):

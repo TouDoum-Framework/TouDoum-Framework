@@ -14,7 +14,7 @@ from server.modules.apps import get_client_file, download_client_file
 
 
 @csrf_exempt
-def worker(request: HttpRequest):
+def register(request: HttpRequest):
     if TokenAuthentication.is_token_valid(request):
         if request.method == 'POST':
             data = json.loads(request.body)

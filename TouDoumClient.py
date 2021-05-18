@@ -2,14 +2,16 @@ import os
 import socket
 from pathlib import Path
 from dotenv import load_dotenv
+
 from client.Api import Api
+from client.ModuesLoader import ModulesLoader
 
 
 class Client:
     hostname: str
     api: Api
+    moduleLoader: ModulesLoader
     configVer: int
-    skipPrivate: bool
     timeout: int
 
     def __init__(self):
@@ -20,15 +22,17 @@ class Client:
         print("Getting config from master")
         data = self.api.register(self.hostname)
         self.configVer = data['id']
-        self.skipPrivate = data['skipPrivate']
         self.timeout = data['timeout']
 
-        print("Checking plugin and download if needed")
+        print("Checking modules and download if needed")
         Path("./client/modules").mkdir(parents=True, exist_ok=True)
-        print("Initialization of Plugin Manager")
+        print("Initialization of Modules Loader")
+        self.moduleLoader = ModulesLoader(data['modules'])
         self.api.getmodules()
         print("Client initialization ok")
         print("Entering into main loop")
+
+        exit()
 
     def loop(self):
         while True:

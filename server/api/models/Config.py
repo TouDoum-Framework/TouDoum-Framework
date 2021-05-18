@@ -17,14 +17,15 @@ class Config(models.Model):
         return str((self.id, self.skipPrivate, self.timeout))
 
 
-def get_last_config() -> Config:
-    config_obj: Config = cache.get("config")
-
-    if not config_obj:
-        config_obj = Config.objects.latest("createdAt")
-        cache.set("config", config_obj)
-
-    return config_obj
+def get_last_config() -> Config or None:
+    try:
+        config: Config = cache.get("config")
+        if not config:
+            config = Config.objects.latest("createdAt")
+            cache.set("config", config)
+        return config
+    except Config.DoesNotExist:
+        return None
 
 
 def last_config() -> JsonResponse:
@@ -35,8 +36,7 @@ def last_config() -> JsonResponse:
 
     reply_config = {
         'id': config_obj.id,
-        'plugins': config_obj.modulesEnabled.split(","),
-        'skipPrivate': config_obj.skipPrivate,
+        'modules': [mod.name for mod in config_obj.modulesEnabled.all()],
         'timeout': config_obj.timeout
     }
     return JsonResponse(reply_config, safe=False)
