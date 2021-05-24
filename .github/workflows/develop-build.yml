@@ -2,6 +2,11 @@ name: Django develop build
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Django develop check"]
+    branches: [ develop ]
+    types:
+      - completed
   push:
     branches: [ develop ]
     paths-ignore:
@@ -12,8 +17,6 @@ jobs:
   build-docker:
 
     runs-on: ubuntu-latest
-
-    if: github.event.pull_request.merged
 
     steps:
       - name: Check out the repo
