@@ -1,0 +1,28 @@
+name: Django develop build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ develop ]
+    paths-ignore:
+      - 'docs/**'
+
+jobs:
+
+  build-docker:
+
+    runs-on: ubuntu-latest
+
+    if: github.event.pull_request.merged
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Push to Docker Hub
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: msterhuj/toudoum
+          tag_with_ref: true
