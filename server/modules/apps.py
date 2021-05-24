@@ -6,6 +6,8 @@ import re
 
 from django.http import FileResponse
 
+from server.modules import views
+
 
 class ModulesConfig(AppConfig):
     name = 'modules'
@@ -43,17 +45,12 @@ def get_urls(file: str) -> list:
         module_name = re.sub("server/modules/src/|/urls/[a-z]+.py", "", module_dir.replace("\\", "/"))
         python_path = "server.modules.src." + module_name + ".urls." + file
         urls.append(path('module/' + module_name + '/', include(python_path)))
+        if file == "api":
+            urls.append(path('module/' + module_name + '/client', views.modules_list_files))
+            urls.append(path('module/' + module_name + '/client/<str:file>', views.module_get_file))
     return urls
 
 
 def get_client_file(module: str) -> list:
-    exit()
     return [re.sub("server/modules/src/" + module + "/client/", "", cf) for cf in
             glob("server/modules/src/" + module + "/client/**/*.py", recursive=True)]
-
-
-def download_client_file(module: str, file: str) -> FileResponse:
-    exit()
-    file = open("server/modules/src/" + module + "/client/" + file, 'rb')
-    print(file)
-    return FileResponse(file)
