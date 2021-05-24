@@ -91,7 +91,7 @@ DATABASES = {
         'NAME': config('POSTGRES_DB', default="TouDoum"),
         'USER': config("POSTGRES_USER", default="please"),
         'PASSWORD': config("POSTGRES_PASSWORD", default="change_me"),
-        'HOST': config("POSTGRES_HOST", default="postgres"),
+        'HOST': config("POSTGRES_HOST", default="127.0.0.1"),
         'PORT': config("POSTGRES_PORT", default="5432", cast=int)
     }
 }
