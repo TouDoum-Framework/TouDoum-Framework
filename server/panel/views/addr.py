@@ -5,7 +5,7 @@ from django.shortcuts import render
 
 import iptools
 
-from server.api.models import *
+from server.api.models.models import *
 from server.panel.forms.addr import AddAddrForm
 from server.panel.views_base import getHeaderData
 

@@ -14,6 +14,8 @@ import os
 from dotenv import load_dotenv
 from decouple import config
 
+from server.modules.apps import load_modules
+
 if os.environ.get("MODE") is None:
     load_dotenv(".env")
     print("Load env from .env file")
@@ -43,10 +45,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'server.cluster',
     'server.api',
     'server.panel',
-    'server.authentication'
-]
+    'server.authentication',
+    'server.modules'
+] + load_modules()
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -92,6 +96,16 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": config("REDIS_URL", default="redis://127.0.0.1:6379/1"),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -125,7 +139,6 @@ USE_TZ = True
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = config('DATA_UPLOAD_MAX_NUMBER_FIELDS', default="4228250625", cast=int)
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'server/staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'server/static'),

@@ -1,19 +1,17 @@
 import os
 import socket
 from pathlib import Path
-
 from dotenv import load_dotenv
 
 from client.Api import Api
-from client.PluginManager import PluginManager
+from client.ModuesLoader import ModulesLoader
 
 
 class Client:
     hostname: str
     api: Api
-    pluginManager: PluginManager
+    moduleLoader: ModulesLoader
     configVer: int
-    skipPrivate: bool
     timeout: int
 
     def __init__(self):
@@ -24,41 +22,18 @@ class Client:
         print("Getting config from master")
         data = self.api.register(self.hostname)
         self.configVer = data['id']
-        self.skipPrivate = data['skipPrivate']
         self.timeout = data['timeout']
 
-        print("Checking plugin and download if needed")
-        Path("./client/plugins").mkdir(parents=True, exist_ok=True)
-        print("Initialization of Plugin Manager")
-        self.pluginManager = PluginManager(data['plugins'])
-        if len(self.pluginManager.download) > 0:
-            print("Downloading missing plugins")
-            self.api.download(self.pluginManager.download)
-            self.pluginManager.reload(data['plugins'])
-            print("All plugins have been downloaded and loaded into the client")
-        else:
-            print("All the plugins already exist")
-
+        print("Checking modules and download if needed")
+        Path("./client/modules").mkdir(parents=True, exist_ok=True)
+        print("Initialization of Modules Loader")
+        self.moduleLoader = ModulesLoader(data['modules'])
         print("Client initialization ok")
         print("Entering into main loop")
 
     def loop(self):
-        while True:
-            data = self.api.getIP()
-            if data is not None:
-
-                result = {
-                    "ip": data['ip'],
-                    "worker": self.hostname,
-                    "config": self.configVer,
-                    "result": {}
-                }
-
-                for plugin in self.pluginManager.plugins:
-                    print("Scanning ip " + data['ip'] + " with plugin " + plugin.name)
-                    result['result'][plugin.name] = bool(plugin.scan(ip=data['ip'], timeout=self.timeout))
-
-                self.api.save(result)
+        # todo make scan and save exec
+        exit()
 
 
 if __name__ == '__main__':
