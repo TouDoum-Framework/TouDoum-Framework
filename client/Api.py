@@ -1,5 +1,8 @@
 import json
 import os
+from base64 import b64decode
+from pathlib import Path
+
 import requests
 import time
 
@@ -34,17 +37,20 @@ class Api:
             time.sleep(60)
             self.register(hostname)
 
-    def get_modules_from_list(self, modules_name: list):
-        pass
-
-    def download(self, download: list):
-        for plugin in download:
-            print("Downloading plugin " + plugin)
+    def get_modules_from_list(self, modules: list):
+        for module_name in modules:
+            Path("./client/modules/" + module_name).mkdir(parents=True, exist_ok=True)
+            print("Getting list of client file for module " + module_name)
             headers = {'Authorization': self.token}
-            reply = requests.get(self.url + "/config/" + plugin, headers=headers)
-            file = open("./client/plugins/" + plugin + ".py", "w")
-            file.write(reply.text)
-            file.close()
+            reply = requests.get(self.url + "/module/" + module_name + "/client", headers)
+            print("List received downloading")
+            for file in json.loads(reply.text):
+                file_name = b64decode(file.encode('ascii')).decode('ascii')
+                print("Downloading " + file_name)
+                r = requests.get(self.url + "/module/" + module_name + "/client/" + file, headers)
+                buffer = open("client/modules/" + module_name + "/" + file_name, "w")
+                buffer.write(r.text)
+                buffer.close()
 
     def getIP(self):
         print("Getting ip to scan")

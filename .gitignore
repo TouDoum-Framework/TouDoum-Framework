@@ -1,5 +1,6 @@
 .idea/
 venv/
+client/modules/
 data/
 *.pyc
 *.sqlite3

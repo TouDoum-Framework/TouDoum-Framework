@@ -17,11 +17,11 @@ class ModulesLoader:
             modules_name = sub("client/modules/|/main.py", "", modules_dir)
 
             if modules_name in modules_required:
-                print("Modules " + modules_name + " early installed")
-                modules_required.pop(modules_name)
+                print("[OK] Modules " + modules_name)
+                modules_required.remove(modules_name)
                 continue
             else:
-                print("Module " + modules_name + " not required removing from modules folder")
+                print("[RM] Module " + modules_name + " not required removing from modules folder")
                 rmtree("client/modules/" + modules_name)
                 continue
 

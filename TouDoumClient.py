@@ -28,29 +28,12 @@ class Client:
         Path("./client/modules").mkdir(parents=True, exist_ok=True)
         print("Initialization of Modules Loader")
         self.moduleLoader = ModulesLoader(data['modules'])
-        self.api.getmodules()
         print("Client initialization ok")
         print("Entering into main loop")
 
-        exit()
-
     def loop(self):
-        while True:
-            data = self.api.getIP()
-            if data is not None:
-
-                result = {
-                    "ip": data['ip'],
-                    "worker": self.hostname,
-                    "config": self.configVer,
-                    "result": {}
-                }
-
-                for plugin in self.pluginManager.plugins:
-                    print("Scanning ip " + data['ip'] + " with plugin " + plugin.name)
-                    result['result'][plugin.name] = bool(plugin.scan(ip=data['ip'], timeout=self.timeout))
-
-                self.api.save(result)
+        # todo make scan and save exec
+        exit()
 
 
 if __name__ == '__main__':
