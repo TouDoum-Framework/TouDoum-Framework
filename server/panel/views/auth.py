@@ -1,13 +1,11 @@
-import requests
 from django.http import HttpRequest
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
-from server.panel.forms.login import LoginForm
+from server.panel.forms.auth import LoginForm
 
 
 def login_view(request: HttpRequest):
-
     if request.user.is_authenticated:
         return redirect("index")
 
@@ -26,3 +24,9 @@ def login_view(request: HttpRequest):
             msg = "Form invalid"
 
     return render(request, 'login.html', {'form': form, 'msg': msg})
+
+
+def logout_view(request: HttpRequest):
+    if request.user.is_authenticated:
+        logout(request)
+    return redirect("login")
