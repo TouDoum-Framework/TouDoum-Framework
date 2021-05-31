@@ -46,9 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'server.cluster',
-    'server.api',
     'server.panel',
-    'server.authentication',
+    'server.api',
     'server.modules'
 ] + load_modules()
 
