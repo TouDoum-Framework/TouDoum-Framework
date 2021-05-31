@@ -10,6 +10,14 @@
                     <hr class="my-4">
                     <h4>Please sing in</h4>
 
+                    {% if msg %}
+                        <div class="text-muted mb-4">
+                            <div class="alert alert-danger">
+                                {{ msg | safe }}
+                            </div>
+                        </div>
+                    {% endif %}
+
                     <form method="post">
                         {% csrf_token %}
                         <label for="username" class="control-label">Username</label>
