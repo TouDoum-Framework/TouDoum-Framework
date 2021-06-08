@@ -8,4 +8,4 @@ class AppConfig(AppConfig):
 
 
 def get_avatar(email: str):
-    return "https://www.gravatar.com/avatar/" + hashlib.md5(email.lower().encode("utf8")) + "?d=retro&f=y"
+    return "https://www.gravatar.com/avatar/" + email.lower() + "?d=retro&f=y"
