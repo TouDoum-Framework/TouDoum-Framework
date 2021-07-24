@@ -22,7 +22,7 @@ def get_modules_name() -> list:
             for module_dir in glob("server/modules/*/apps.py")]
 
 
-def syncDB() -> None:
+def sync_db() -> None:
     from server.modules.models import Module
     from server.cluster.urls import registerMaster
     master = registerMaster()

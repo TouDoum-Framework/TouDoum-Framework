@@ -1,0 +1,59 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Ip DB{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="card shadow">
+                    <div class="card-header">
+                        Create new token for api
+                    </div>
+                    {% if msg %}
+                        <div class="text-muted mb-4">
+                            <div class="alert alert-info">
+                                {{ msg | safe }}
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="token" class="form-label">Token </label>
+                                {{ token_add_form.token }}
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary my-4">Create</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="card shadow">
+                    <div class="card-header">Available Token</div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Token</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tk in token_list %}
+                                    <tr>
+                                        <th>{{ tk.id }}</th>
+                                        <td>{{ tk.token }}</td>
+                                        <td><button class="btn btn-danger">Delete</button></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
