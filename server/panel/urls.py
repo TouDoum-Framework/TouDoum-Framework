@@ -1,11 +1,14 @@
 from django.urls import path
 
 from server.modules.apps import get_urls
-from server.panel import views_base
-from server.panel.views import addr as addr_views
+from server.panel.views import auth, modules, ipdb
+from server.panel.views.index import index
+
 
 urlpatterns = [
-    path('', views_base.index, name='panel_index'),
-    path('addr', addr_views.addr, name='panel_addr'),
-    path('addr/<str:ip>', addr_views.edit, name='panel_addr_edit'),
+    path('', auth.login_view, name="login"),
+    path('logout', auth.logout_view, name="logout"),
+    path('panel', index, name="index"),
+    path('panel/modules', modules.index, name="modules_index"),
+    path('panel/ipdb', ipdb.index, name="ipdb_index")
 ] + get_urls("panel")

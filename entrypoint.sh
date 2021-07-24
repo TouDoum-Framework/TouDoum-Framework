@@ -1,8 +1,9 @@
+#!/usr/bin/env bash
 MODE=$(printenv MODE)
 SQL_HOST=$(printenv POSTGRES_HOST)
 SQL_PORT=$(printenv POSTGRES_PORT)
 
-if [ $MODE == "master" ]; then
+if [[ $MODE == "master" ]]; then
         echo "Starting master";
         echo "Waiting for postgres..."
         while ! nc -z $SQL_HOST $SQL_PORT; do
@@ -12,7 +13,7 @@ if [ $MODE == "master" ]; then
         python3 manage.py makemigrations;
         python3 manage.py migrate;
         gunicorn --config server/gunicorn-cfg.py server.wsgi;
-elif [ $MODE == "worker" ]; then
+elif [[ $MODE == "worker" ]]; then
         echo "Starting worker";
         python3 TouDoumClient.py;
 else

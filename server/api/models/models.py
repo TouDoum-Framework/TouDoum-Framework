@@ -2,6 +2,8 @@ from django.db import models
 from server.api.models.Config import Config
 from server.modules.models import Module
 
+from server.core.static import ip_private
+
 
 class Worker(models.Model):
     uuid = models.CharField(max_length=64)
@@ -22,3 +24,7 @@ class Addr(models.Model):
 
     def __str__(self):
         return str((self.ip, self.rescanPriority))
+
+    def save(self, *args, **kwargs):
+        self.isPrivate = self.ip in ip_private
+        super(Addr, self).save(*args, **kwargs)
