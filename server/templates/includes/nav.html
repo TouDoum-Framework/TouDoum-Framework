@@ -11,6 +11,7 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'modules_index' %}">Modules</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'ipdb_index' %}">Ip DB</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'token_index' %}">Token</a></li>
             </ul>
             <div class="dropdown text-end d-flex">
                 <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser"
@@ -18,7 +19,8 @@
                     <img src="{{ avatar }}" alt="mdo" width="32" height="32"
                          class="rounded-circle">
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end text-small" aria-labelledby="dropdownUser">
+                <ul class="dropdown-menu dropdown-menu-end text-small text-end" aria-labelledby="dropdownUser">
+                    <li><a class="dropdown-item" href="/admin">Django Admin (Advanced)</a></li>
                     <li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
                 </ul>
             </div>
