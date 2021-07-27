@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'server.cluster',
     'server.panel',
     'server.api',
@@ -42,8 +43,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'server.api.TokenAuthMiddleware.TokenAuthMiddleware'
+    # 'server.api.TokenAuthMiddleware.TokenAuthMiddleware'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
 
 ROOT_URLCONF = 'server.urls'
 TEMPLATE_DIR = os.path.join(BASE_DIR, "server/templates")
