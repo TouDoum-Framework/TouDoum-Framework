@@ -3,7 +3,7 @@ from django.apps import AppConfig
 
 
 class ApiConfig(AppConfig):
-    name = 'api'
+    name = 'server.api'
 
 
 def register_token_from_env() -> None:

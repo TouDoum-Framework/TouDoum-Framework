@@ -10,7 +10,7 @@ from server.modules import views
 
 
 class ModulesConfig(AppConfig):
-    name = 'modules'
+    name = 'server.modules'
 
 
 def load_modules() -> list:

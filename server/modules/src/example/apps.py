@@ -5,4 +5,4 @@ version = "0"
 
 
 class ExampleConfig(AppConfig):
-    name = 'example'
+    name = 'server.modules.src.example'

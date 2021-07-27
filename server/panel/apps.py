@@ -4,7 +4,7 @@ from django.apps import AppConfig
 
 
 class AppConfig(AppConfig):
-    name = 'panel'
+    name = 'server.panel'
 
 
 def get_avatar(email: str):
