@@ -1,6 +1,6 @@
 from django.db import models
 
-from server.cluster.models import Master
+from server.cluster.models.Master import Master
 
 
 class Module(models.Model):

@@ -8,7 +8,8 @@ from server.api.models import Config
 
 from server.api import ErrorCode
 from server.core.ResultManager import ResultManger
-from server.api.models.models import Addr, Worker
+from server.api.models.Addr import Addr
+from server.cluster.models.Worker import Worker
 
 
 @csrf_exempt

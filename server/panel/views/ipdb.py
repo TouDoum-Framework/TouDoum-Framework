@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpRequest
 from django.shortcuts import render
 
-from server.api.models.models import Addr
+from server.api.models.Addr import Addr
 from server.panel.apps import get_avatar
 from server.panel.forms.ip_add import IpAddFrom
 
