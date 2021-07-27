@@ -7,6 +7,7 @@ from server.modules.apps import get_urls
 
 router = routers.DefaultRouter()
 router.register(r'users', next.UserViewSet)
+router.register(r'addr', next.AddrViewSet)
 
 # /api
 urlpatterns = [
