@@ -8,10 +8,10 @@ from server.modules.models import Module
 
 class Config(models.Model):
     pause = models.BooleanField(default=False)
-    modulesEnabled = models.ManyToManyField(Module)
-    skipPrivate = models.BooleanField(default=True)
+    modules_enabled = models.ManyToManyField(Module)
+    skip_private = models.BooleanField(default=True)
     timeout = models.IntegerField()
-    createdAt = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return str(self.id)
@@ -21,7 +21,7 @@ def get_last_config() -> Config or None:
     try:
         config: Config = cache.get("config")
         if not config:
-            config = Config.objects.latest("createdAt")
+            config = Config.objects.latest("created_at")
             cache.set("config", config)
         return config
     except Config.DoesNotExist:
@@ -36,7 +36,7 @@ def last_config() -> JsonResponse:
 
     reply_config = {
         'id': config_obj.id,
-        'modules': [mod.name for mod in config_obj.modulesEnabled.all()],
+        'modules': [mod.name for mod in config_obj.modules_enabled.all()],
         'timeout': config_obj.timeout
     }
     return JsonResponse(reply_config, safe=False)
@@ -44,4 +44,4 @@ def last_config() -> JsonResponse:
 
 def get_enabled_modules() -> list:
     config: Config = get_last_config()
-    return config.modulesEnabled.split(",")
+    return config.modules_enabled.split(",")

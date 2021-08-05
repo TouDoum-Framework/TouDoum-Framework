@@ -33,7 +33,7 @@ def sync_db() -> None:
             mod.name = module.name
             mod.version = module.version
             mod.save()
-        mod.availableAt.add(master.pk)
+        mod.available_at.add(master.pk)
 
 
 def get_urls(file: str) -> list:

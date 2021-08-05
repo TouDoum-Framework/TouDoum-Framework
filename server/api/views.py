@@ -20,10 +20,10 @@ def register(request: HttpRequest):
         if worker_obj is None:
             new_worker = Worker()
             new_worker.uuid = data['hostname']
-            new_worker.currentConfig = Config.get_last_config()
+            new_worker.current_config = Config.get_last_config()
             new_worker.save()
             return Config.last_config()
-        worker_obj.currentConfig = Config.get_last_config()
+        worker_obj.current_config = Config.get_last_config()
         worker_obj.save()
         return Config.last_config()
     else:
@@ -41,7 +41,7 @@ def addr(request: HttpRequest):
         else:
             ip = Addr.objects.all().filter(used=False, isPrivate=False).order_by("-rescanPriority",
                                                                                  "lastUpdate").first()
-        ip.lastUpdate = datetime.now()
+        ip.last_update = datetime.now()
         ip.rescanPriority = 0
         ip.used = True
         ip.save()
@@ -52,7 +52,7 @@ def addr(request: HttpRequest):
         data = json.loads(request.body)
 
         ip = Addr.objects.filter(ip=data["ip"]).first()
-        ip.lastUpdate = datetime.now()
+        ip.last_update = datetime.now()
         ip.rescanPriority = 0
         ip.used = False
         ip.save()

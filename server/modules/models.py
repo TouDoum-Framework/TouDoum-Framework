@@ -6,7 +6,7 @@ from server.cluster.models.Master import Master
 class Module(models.Model):
     name = models.CharField(max_length=64)
     version = models.CharField(max_length=64)
-    availableAt = models.ManyToManyField(Master)
+    available_at = models.ManyToManyField(Master)
 
     def __str__(self):
-        return str(self.id)
+        return str(self.name)

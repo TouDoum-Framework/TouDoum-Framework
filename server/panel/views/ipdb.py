@@ -22,7 +22,7 @@ def index(request: HttpRequest):
                 while True:
                     addr = Addr()
                     addr.ip = iptools.next(ipr)
-                    addr.rescanPriority = ip_add_form.cleaned_data.get("rescan_priority")
+                    addr.scan_priority = ip_add_form.cleaned_data.get("rescan_priority")
                     try:
                         addr.save()
                     except IntegrityError:
