@@ -17,7 +17,7 @@ class AddrViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Addr to be viewed or edited.
     """
-    queryset = Addr.objects.all().order_by("-rescanPriority", "lastUpdate")
+    queryset = Addr.objects.all().order_by("-scan_priority", "last_update")
     serializer_class = AddrSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -29,7 +29,7 @@ class AddrViewSet(viewsets.ModelViewSet):
             while True:
                 addr = Addr()
                 addr.ip = iptools.next(ip_list)
-                addr.rescanPriority = int(request.data["rescanPriority"])
+                addr.scan_priority = int(request.data["scan_priority"])
                 addr.save()
                 addrs.append(addr)
         except StopIteration:
@@ -38,6 +38,12 @@ class AddrViewSet(viewsets.ModelViewSet):
 
 
 class ConfigViewSet(viewsets.ModelViewSet):
-    queryset = Config.objects.all()
+    queryset = Config.objects.all().order_by("id")
     serializer_class = ConfigSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class ModuleViewSet(viewsets.ModelViewSet):
+    queryset = Module.objects.all().order_by("id")
+    serializer_class = ModuleSerializer
     permission_classes = [permissions.IsAuthenticated]
