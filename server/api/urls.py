@@ -6,8 +6,8 @@ from server.api import next
 from server.modules.apps import get_urls
 
 router = routers.DefaultRouter()
-router.register(r'users', next.UserViewSet)
 router.register(r'addr', next.AddrViewSet)
+router.register(r'config', next.ConfigViewSet)
 
 # /api
 urlpatterns = [
@@ -15,4 +15,4 @@ urlpatterns = [
     path('addr', views.addr),
     path('next', next.nextBrowsableAPI, name="browsable_api"),
     path('next/', include(router.urls))
-] + get_urls("api")
+]  # + get_urls("api")

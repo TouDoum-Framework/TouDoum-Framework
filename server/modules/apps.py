@@ -4,8 +4,6 @@ from django.urls import path, include
 from importlib import import_module
 import re
 
-from django.http import FileResponse
-
 from server.modules import views
 
 

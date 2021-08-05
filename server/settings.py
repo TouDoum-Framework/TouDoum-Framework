@@ -30,9 +30,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'server.cluster',
-    'server.panel',
+    'server.modules',
     'server.api',
-    'server.modules'
+    'server.panel'
 ] + load_modules()
 
 MIDDLEWARE = [

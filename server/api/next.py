@@ -9,13 +9,8 @@ from server.api.serializers import *
 from server.api.models.Addr import Addr
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = User.objects.all().order_by("-date_joined")
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+def nextBrowsableAPI(request: HttpRequest):
+    return render(request, 'browsable.html')
 
 
 class AddrViewSet(viewsets.ModelViewSet):
@@ -42,5 +37,7 @@ class AddrViewSet(viewsets.ModelViewSet):
         return HttpResponseRedirect(self.request.path_info)
 
 
-def nextBrowsableAPI(request: HttpRequest):
-    return render(request, 'browsable.html')
+class ConfigViewSet(viewsets.ModelViewSet):
+    queryset = Config.objects.all()
+    serializer_class = ConfigSerializer
+    permission_classes = [permissions.IsAuthenticated]

@@ -14,7 +14,7 @@ class Config(models.Model):
     createdAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str((self.id, self.skipPrivate, self.timeout))
+        return str(self.id)
 
 
 def get_last_config() -> Config or None:
