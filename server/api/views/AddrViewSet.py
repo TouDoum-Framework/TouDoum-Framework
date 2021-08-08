@@ -1,16 +1,9 @@
-from django.http import HttpRequest, HttpResponseRedirect
-from django.shortcuts import render
-from rest_framework import viewsets
-from rest_framework import permissions
-
 import iptools
+from django.http import HttpResponseRedirect
+from rest_framework import viewsets, permissions
 
-from server.api.serializers import *
 from server.api.models.Addr import Addr
-
-
-def nextBrowsableAPI(request: HttpRequest):
-    return render(request, 'browsable.html')
+from server.api.serializers import AddrSerializer
 
 
 class AddrViewSet(viewsets.ModelViewSet):
@@ -35,15 +28,3 @@ class AddrViewSet(viewsets.ModelViewSet):
         except StopIteration:
             pass
         return HttpResponseRedirect(self.request.path_info)
-
-
-class ConfigViewSet(viewsets.ModelViewSet):
-    queryset = Config.objects.all().order_by("id")
-    serializer_class = ConfigSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-class ModuleViewSet(viewsets.ModelViewSet):
-    queryset = Module.objects.all().order_by("id")
-    serializer_class = ModuleSerializer
-    permission_classes = [permissions.IsAuthenticated]
