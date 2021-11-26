@@ -4,8 +4,6 @@ from django.urls import path, include
 from importlib import import_module
 import re
 
-from django.http import FileResponse
-
 from server.modules import views
 
 
@@ -35,7 +33,7 @@ def sync_db() -> None:
             mod.name = module.name
             mod.version = module.version
             mod.save()
-        mod.availableAt.add(master.pk)
+        mod.available_at.add(master.pk)
 
 
 def get_urls(file: str) -> list:

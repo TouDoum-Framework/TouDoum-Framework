@@ -1,5 +1,5 @@
 from socket import gethostname
-from server.cluster.models import Master
+from server.cluster.models.Master import Master
 from django.core.cache import cache
 
 urlpatterns = []
