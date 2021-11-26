@@ -1,0 +1,67 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Ip DB{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="card shadow">
+                    <div class="card-header">
+                        Add new ip on database
+                    </div>
+                    {% if msg %}
+                        <div class="text-muted mb-4">
+                            <div class="alert alert-info">
+                                {{ msg | safe }}
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label for="ip_range" class="form-label">Ip with cird</label>
+                                {{ ip_add_form.ip_range }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="rescan_priority" class="form-label">Scan priority</label>
+                                {{ ip_add_form.rescan_priority }}
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary my-4">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="card shadow">
+                    <div class="card-header">Ip on database</div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Ip</th>
+                                    <th scope="col">Is Private</th>
+                                    <th scope="col">Scan Priority</th>
+                                    <th scope="col">Used</th>
+                                    <th scope="col">Last update</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>127.0.0.1</th>
+                                    <td>True</td>
+                                    <td>0</td>
+                                    <td>False</td>
+                                    <td>14/07/2021 / 19:00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

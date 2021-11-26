@@ -1,8 +1,6 @@
 .idea/
 venv/
+client/modules/
 data/
-test/
-test.py
 *.pyc
-*.txt
-mongodb_data/
+*.sqlite3

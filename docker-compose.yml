@@ -1,41 +1,65 @@
 version: '3.3'
 
-# todo add env var to server and client class
-
 services:
+
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=TouDoum
+      - POSTGRES_USER=please
+      - POSTGRES_PASSWORD=change_me
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
 
   mongo:
     image: mongo
-    container_name: mongo
-    volumes:
-      - ./mongodb_data/:/data/db
-
-  mongo-express:
-    image: mongo-express
-    container_name: mongo_ui
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=please
+      - MONGO_INITDB_ROOT_PASSWORD=change_me
     ports:
-      - 8081:8081
-    depends_on:
-      - mongo
+      - 27017:27017
+    volumes:
+      - ./data/mongo:/data/db/
 
-  server:
-    container_name: server
-    build: .
-    image: msterhuj/toudoum
-    env_file: .env
-    environment:
-      - "IS_SERVER=True"
-      - "IP_RANGE_LIST=192.168.0.0/24"
-    depends_on:
-      - mongo
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
 
-  client:
-    build: .
+  master:
     image: msterhuj/toudoum
-    env_file: .env
-    environment:
-      - "MONGO_HOST=mongodb://mongo:27017/"
-      - "MONGO_DB_NAME=ipisinthisdb"
+    build: .
     depends_on:
+      - postgres
       - mongo
-      - server
+      - redis
+    environment:
+      - MODE=master
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=TouDoum
+      - POSTGRES_USER=please
+      - POSTGRES_PASSWORD=change_me
+      - MONGO_HOST=mongo
+      - MONGO_USER=please
+      - MONGO_PASS=change_me
+      - REDIS_URL="redis://127.0.0.1:6379/1"
+      - SECRET_KEY=No_U
+      - TOKEN="no.seriously.change.me"
+      - ALLOWED_HOSTS=127.0.0.1,localhost
+    ports:
+      - 8000:8000
+
+  worker:
+    image: msterhuj/toudoum
+    build: .
+    depends_on:
+      - master
+    environment:
+      - MODE=worker
+      - API_URL="http://master:8000/api/v1"
+      - TOKEN="no.seriously.change.me"

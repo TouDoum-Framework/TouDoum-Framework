@@ -1,18 +1,33 @@
-FROM python:3.8.5-buster
+FROM python:3.9.5
 
 LABEL MAINTAINER="gabin.lanore@gmail.com"
 
-ENV PATH="/app:${PATH}"
-ENV DOCKER_MODE=True
+RUN apt update && apt install netcat -y
 
-ENV IP_RANGE_LIST="192.168.0.0/24"
-ENV MONGO_URL="mongodb://mongo:27017/"
-ENV MONGO_DB_NAME="ipisinthisdb"
+ENV SECRET_KEY="No_U"
+ENV TOKEN="Youwouuuu"
+ENV API_URL="http://127.0.0.1:8000/api/v1"
+
+ENV POSTGRES_HOST="127.0.0.1"
+ENV POSTGRES_PORT=5432
+ENV POSTGRES_DB=TouDoum
+ENV POSTGRES_USER=user
+ENV POSTGRES_PASSWORD=pass
+
+ENV MONGO_HOST="127.0.0.1"
+ENV MONGO_USER=please
+ENV MONGO_PASS=change_me
+
+ENV REDIS_URL="redis://127.0.0.1:6379/1"
+
+EXPOSE 8000
+STOPSIGNAL SIGTERM
 
 WORKDIR /app
 
 COPY . /app
 
 RUN pip3 install -r requirements.txt
+RUN chmod +x entrypoint.sh
 
-ENTRYPOINT [ "python3", "TouDoum.py" ]
+ENTRYPOINT [ "bash", "entrypoint.sh" ]
