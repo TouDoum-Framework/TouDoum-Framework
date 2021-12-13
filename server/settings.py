@@ -1,23 +1,20 @@
 import os
 from dotenv import load_dotenv
-from decouple import config
 
 from server.modules.apps import load_modules
 
 if os.environ.get("MODE") is None:
     load_dotenv(".env")
     print("Load env from .env file")
-else:
-    print("Not using .env file")
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = config('SECRET_KEY', default="No_U")
+SECRET_KEY = os.environ.get('SECRET_KEY', "No_U")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = bool(os.environ.get('DEBUG', False))
 
-ALLOWED_HOSTS = str(config('ALLOWED_HOSTS', default="127.0.0.1,localhost")).split(',')
+ALLOWED_HOSTS = str(os.environ.get('ALLOWED_HOSTS', "127.0.0.1,localhost")).split(',')
 
 # Application definition
 
@@ -75,21 +72,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config('POSTGRES_DB', default="TouDoum"),
-        'USER': config("POSTGRES_USER", default="please"),
-        'PASSWORD': config("POSTGRES_PASSWORD", default="change_me"),
-        'HOST': config("POSTGRES_HOST", default="127.0.0.1"),
-        'PORT': config("POSTGRES_PORT", default="5432", cast=int)
+        'NAME': os.environ.get('POSTGRES_DB', "TouDoum"),
+        'USER': os.environ.get("POSTGRES_USER", "please"),
+        'PASSWORD': os.environ.get("POSTGRES_PASSWORD", "change_me"),
+        'HOST': os.environ.get("POSTGRES_HOST", "127.0.0.1"),
+        'PORT': int(os.environ.get("POSTGRES_PORT", "5432"))
     }
 }
 
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": config("REDIS_URL", default="redis://127.0.0.1:6379/1"),
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
+        "LOCATION": os.environ.get("REDIS_URL", "redis://127.0.0.1:6379/1"),
+        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"}
     }
 }
 
@@ -101,12 +96,12 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = config('TIME_ZONE', default="UTC")
+TIME_ZONE = os.environ.get('TIME_ZONE', "UTC")
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-DATA_UPLOAD_MAX_NUMBER_FIELDS = config('DATA_UPLOAD_MAX_NUMBER_FIELDS', default="4228250625", cast=int)
+DATA_UPLOAD_MAX_NUMBER_FIELDS = int(os.environ.get('DATA_UPLOAD_MAX_NUMBER_FIELDS', "4228250625"))
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
