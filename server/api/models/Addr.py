@@ -1,7 +1,6 @@
 from django.db import models
 
 from server.modules.models import Module
-from server.core.static import ip_private
 
 
 class Addr(models.Model):

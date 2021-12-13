@@ -14,6 +14,17 @@ services:
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: rabbitmq
+    restart: always
+    environment:
+      - DEFAULT_USER=white
+      - DEFAULT_PASS=neo
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
   redis:
     image: redis
     ports:
