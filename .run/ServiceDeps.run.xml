@@ -6,7 +6,6 @@
         <option name="services">
           <list>
             <option value="postgres" />
-            <option value="mongo" />
             <option value="redis" />
           </list>
         </option>
