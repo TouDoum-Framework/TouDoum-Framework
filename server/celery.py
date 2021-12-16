@@ -1,11 +1,15 @@
-import os
+from os import environ
 
 from celery import Celery
 
 # Set the default Django settings module for the 'celery' program.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'server.settings')
+environ.setdefault('DJANGO_SETTINGS_MODULE', 'server.settings')
 
-app = Celery('tasks',  broker='pyamqp://white:neo@localhost//')
+app = Celery('tasks',  broker='pyamqp://{}:{}@{}//'.format(
+    environ.get("MQ_HOST", "127.0.0.1"),
+    environ.get("MQ_USER", "white"),
+    environ.get("MQ_PASS", "neo")
+))
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.
