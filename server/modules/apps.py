@@ -2,6 +2,7 @@ from django.apps import AppConfig
 from glob import glob
 from django.urls import path, include
 from importlib import import_module
+from json import loads as json_loads
 import re
 
 
