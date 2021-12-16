@@ -1,7 +1,6 @@
-from django.urls import path
+from rest_framework import routers
 
-from server.modules.src.example import views
-
-urlpatterns = [
-    path('test', views.test)
-]
+router = routers.DefaultRouter()
+# register your view set here
+# router.register()
+urlpatterns = router.urls

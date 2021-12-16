@@ -12,5 +12,3 @@ urlpatterns = [
     path('panel/ipdb', ipdb.index, name="ipdb_index"),
     path('panel/token', token.index, name="token_index")
 ] + get_urls("panel")
-
-print(urlpatterns)
