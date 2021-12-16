@@ -20,8 +20,6 @@ def get_modules_name() -> list:
 
 def sync_db() -> None:
     from server.modules.models import Module
-    from server.cluster.urls import registerMaster
-    master = registerMaster()
     for module_dir in glob("server/modules/src/*/apps.py"):
         module_name = re.sub("server/modules/src/|/apps.py", "", module_dir.replace("\\", "/"))
         module = import_module("server.modules.src." + module_name + ".apps", ".")
@@ -31,7 +29,6 @@ def sync_db() -> None:
             mod.name = module.name
             mod.version = module.version
             mod.save()
-        mod.available_at.add(master.pk)
 
 
 def get_urls(file: str) -> list:
