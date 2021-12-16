@@ -10,32 +10,31 @@ services:
       - POSTGRES_USER=please
       - POSTGRES_PASSWORD=change_me
     ports:
-      - 5432:5432
+      - "5432:5432"
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
 
-  mongo:
-    image: mongo
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: rabbitmq
     restart: always
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=please
-      - MONGO_INITDB_ROOT_PASSWORD=change_me
+      - DEFAULT_USER=white
+      - DEFAULT_PASS=neo
     ports:
-      - 27017:27017
-    volumes:
-      - ./data/mongo:/data/db/
+      - "5672:5672"
+      - "15672:15672"
 
   redis:
     image: redis
     ports:
-      - 6379:6379
+      - "6379:6379"
 
   master:
     image: msterhuj/toudoum
     build: .
     depends_on:
       - postgres
-      - mongo
       - redis
     environment:
       - MODE=master
@@ -44,15 +43,12 @@ services:
       - POSTGRES_DB=TouDoum
       - POSTGRES_USER=please
       - POSTGRES_PASSWORD=change_me
-      - MONGO_HOST=mongo
-      - MONGO_USER=please
-      - MONGO_PASS=change_me
       - REDIS_URL="redis://127.0.0.1:6379/1"
       - SECRET_KEY=No_U
       - TOKEN="no.seriously.change.me"
       - ALLOWED_HOSTS=127.0.0.1,localhost
     ports:
-      - 8000:8000
+      - "8000:8000"
 
   worker:
     image: msterhuj/toudoum

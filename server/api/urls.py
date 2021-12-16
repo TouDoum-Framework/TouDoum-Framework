@@ -10,6 +10,7 @@ from server.api.views.WorkerViewSet import WorkerViewSet
 from server.modules.apps import get_urls
 
 router = routers.DefaultRouter()
+
 router.register(r'addr', AddrViewSet)
 router.register(r'config', ConfigViewSet)
 router.register(r'module', ModuleViewSet)
@@ -18,6 +19,6 @@ router.register(r'worker', WorkerViewSet)
 
 # /api
 urlpatterns = [
-    path('v2', browsable_API, name="browsable_api"),
-    path('v2/', include(router.urls))
-]  # + get_urls("api")
+    path('api', browsable_API, name="browsable_api"),
+    path('api/', include(router.urls))
+] + get_urls("api")

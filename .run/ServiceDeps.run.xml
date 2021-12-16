@@ -6,8 +6,8 @@
         <option name="services">
           <list>
             <option value="postgres" />
-            <option value="mongo" />
             <option value="redis" />
+            <option value="rabbitmq" />
           </list>
         </option>
         <option name="sourceFilePath" value="docker-compose.yml" />
