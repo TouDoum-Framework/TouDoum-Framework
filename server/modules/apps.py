@@ -42,7 +42,8 @@ def get_urls(file: str) -> list:
     for module_dir in glob("server/modules/src/*/urls/" + file + ".py"):
         module_name = re.sub("server/modules/src/|/urls/[a-z]+.py", "", module_dir.replace("\\", "/"))
         python_path = "server.modules.src." + module_name + ".urls." + file
-        urls.append(path('module/' + module_name + '/', include(python_path)))
+        if file == "panel":
+            urls.append(path('panel/module/' + module_name + '/', include(python_path)))
         if file == "api":
             urls.append(path('module/' + module_name + '/client', views.modules_list_files))
             urls.append(path('module/' + module_name + '/client/<str:file>', views.module_get_file))
