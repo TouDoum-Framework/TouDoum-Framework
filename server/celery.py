@@ -6,9 +6,9 @@ from celery import Celery
 environ.setdefault('DJANGO_SETTINGS_MODULE', 'server.settings')
 
 app = Celery('tasks',  broker='pyamqp://{}:{}@{}//'.format(
-    environ.get("MQ_HOST", "127.0.0.1"),
     environ.get("MQ_USER", "white"),
-    environ.get("MQ_PASS", "neo")
+    environ.get("MQ_PASS", "neo"),
+    environ.get("MQ_HOST", "127.0.0.1")
 ))
 
 # Using a string here means the worker doesn't have to serialize
