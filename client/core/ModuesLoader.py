@@ -1,7 +1,7 @@
 from re import sub
 from shutil import rmtree
 from glob import glob
-from client.Api import Api
+from client.core.Api import Api
 
 
 class ModulesLoader:

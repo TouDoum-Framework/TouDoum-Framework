@@ -6,7 +6,10 @@ from pathlib import Path
 import requests
 import time
 
+from deprecated.classic import deprecated
 
+
+@deprecated("new api version is now available")
 class Api:
     url: str
     token: str
@@ -15,6 +18,7 @@ class Api:
         self.url = os.environ.get('API_URL')
         self.token = os.environ.get('TOKEN')
 
+    @deprecated
     def register(self, hostname: str):
         print("Try to register client")
         headers = {'Authorization': self.token}
@@ -37,6 +41,7 @@ class Api:
             time.sleep(60)
             self.register(hostname)
 
+    @deprecated
     def get_modules_from_list(self, modules: list):
         for module_name in modules:
             Path("./client/modules/" + module_name).mkdir(parents=True, exist_ok=True)
@@ -52,6 +57,7 @@ class Api:
                 buffer.write(r.text)
                 buffer.close()
 
+    @deprecated
     def getIP(self):
         print("Getting ip to scan")
         headers = {'Authorization': self.token}
@@ -62,6 +68,7 @@ class Api:
             return data
         return None
 
+    @deprecated
     def save(self, result):
         print("Saving scan result")
         headers = {'Authorization': self.token}
