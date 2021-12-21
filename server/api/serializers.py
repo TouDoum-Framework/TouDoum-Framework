@@ -2,8 +2,6 @@ from rest_framework import serializers
 
 from server.api.models.Addr import Addr
 from server.api.models.Config import Config
-from server.cluster.models.Master import Master
-from server.cluster.models.Worker import Worker
 from server.modules.models import Module
 
 
@@ -24,22 +22,8 @@ class ConfigSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ModuleSerializer(serializers.HyperlinkedModelSerializer):
-    available_at = serializers.StringRelatedField(many=True)
+    depend_on = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = Module
-        fields = ["url", "name", "version", "available_at"]
-
-
-class MasterSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Master
-        fields = ["url", "uuid", "created_at", "last_update"]
-
-
-class WorkerSerializer(serializers.HyperlinkedModelSerializer):
-    current_config = serializers.StringRelatedField(many=True)
-
-    class Meta:
-        model = Worker
-        fields = ["url", "uuid", "current_config", "created_at"]
+        fields = ["url", "name", "display_name", "description", "version", "depend_on", "author", "repo"]

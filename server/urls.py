@@ -7,8 +7,6 @@ from django.urls import path, include
 urlpatterns = [
     path('', include('server.panel.urls')),
     path('', include('server.api.urls')),
-    path('cluster/', include('server.cluster.urls')),
-    path('modules/', include('server.modules.urls')),
     path('admin/', admin.site.urls)
 ]
 
