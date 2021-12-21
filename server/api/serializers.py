@@ -22,8 +22,8 @@ class ConfigSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ModuleSerializer(serializers.HyperlinkedModelSerializer):
-    available_at = serializers.StringRelatedField(many=True)
+    depend_on = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = Module
-        fields = ["url", "name", "version", "available_at"]
+        fields = ["url", "name", "display_name", "description", "version", "depend_on", "author", "repo"]
