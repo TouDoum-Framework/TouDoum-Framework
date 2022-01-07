@@ -47,6 +47,7 @@ services:
       - SECRET_KEY=No_U
       - TOKEN="no.seriously.change.me"
       - ALLOWED_HOSTS=127.0.0.1,localhost
+      - CELERY_EXTRA_ARGS="-l INFO -E"
     ports:
       - "8000:8000"
 
