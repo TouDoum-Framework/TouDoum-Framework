@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/bash
 function wait_tcp() {
-    echo "Checking $3 port";
+    echo "Checking $3 on host $1 for port $2";
     try=0;
     try_max=5;
     while ! 2> /dev/null /dev/tcp/"$1"/"$2"; do
@@ -25,6 +25,7 @@ elif [[ $MODE == "consumer" ]]; then
     echo "Starting celery consumer";
     celery -A client.TouDoumClient worker "$CELERY_EXTRA_ARGS";
 else
+    if [[ $DEBUG ]]; then bash; fi
     echo "Please set node at master or consumer with MODE env var";
     exit;
 fi

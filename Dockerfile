@@ -1,6 +1,8 @@
-FROM python:3.9.5
+FROM python:3.10-alpine
 
 LABEL MAINTAINER="gabin.lanore@gmail.com"
+
+RUN apk update && apk add bash --no-cache
 
 ENV SECRET_KEY="No_U"
 ENV TOKEN="Youwouuuu"
@@ -24,4 +26,4 @@ COPY . /app
 RUN pip3 install -r requirements.txt
 RUN chmod +x entrypoint.sh
 
-ENTRYPOINT [ "bash", "entrypoint.sh" ]
+ENTRYPOINT [ "/bin/bash", "entrypoint.sh" ]

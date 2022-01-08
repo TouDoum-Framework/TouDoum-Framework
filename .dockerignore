@@ -1,7 +1,13 @@
-venv/
 .git/
+.idea/
+.run/
+__pycache__/
+venv/
+data/
 docs/
+migrations/
+.env
+.gitignore
 docker-compose.yml
 Dockerfile
 README.md
-.env
