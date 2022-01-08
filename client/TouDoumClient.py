@@ -1,26 +1,14 @@
-from socket import gethostname
+if __name__ == '__main__':
+    print("Error: to run the celery worker please run this command or refer to the documentation")
+    print("Error: > celery -A client.TouDoumClient worker")
+    exit()
+
 from os import environ
+
 from celery import Celery
 from dotenv import load_dotenv
 
-from client.core.Api import Api
-from client.core.ModuesLoader import ModulesLoader
-
-
-class Client:
-    hostname: str
-    api: Api
-    moduleLoader: ModulesLoader
-    celery: Celery
-
-    def __init__(self, celery):
-        print("Initialization of client")
-        self.hostname = gethostname()
-        self.api = Api()
-        self.celery = celery
-
-        print("Client init success starting Celery worker")
-
+from client.core.TouDoumWorker import TouDoumWorker
 
 if environ.get("MODE") is None:
     load_dotenv("../.env")
@@ -32,4 +20,5 @@ celery = Celery('tasks', broker='pyamqp://{}:{}@{}//'.format(
     environ.get("MQ_HOST", "127.0.0.1")
 ))
 celery.autodiscover_tasks(['client.core'])
-#client = Client(celery)
+tdw = TouDoumWorker()
+tdw.set_celery_instance(celery)
