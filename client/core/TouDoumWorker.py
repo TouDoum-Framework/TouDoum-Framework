@@ -9,6 +9,9 @@ from client.core.ModuesLoader import ModulesLoader
 
 
 class TouDoumWorker(Singleton):
+    """
+    This class has only a unique instance
+    """
     hostname: str
     api: Api
     moduleLoader: ModulesLoader

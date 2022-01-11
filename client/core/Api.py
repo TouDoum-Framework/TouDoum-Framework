@@ -18,6 +18,9 @@ class Api:
         self.url = os.environ.get('API_URL')
         self.token = os.environ.get('TOKEN')
 
+    def get_client_file_from_module_name(self, module_name):
+        pass
+
     @deprecated
     def register(self, hostname: str):
         print("Try to register client")

@@ -13,7 +13,7 @@ def load_modules() -> list:
     return [module.replace("\\", ".").replace("/", ".") for module in glob("server/modules/src/*")]
 
 
-def sort_by_key_asc(data: list, key: str) -> len:
+def sort_by_key_asc(data: list, key: str) -> list:
     new_data = []
     max_len = 0
     index_len = 0
