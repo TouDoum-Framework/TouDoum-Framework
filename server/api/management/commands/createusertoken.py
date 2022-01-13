@@ -4,8 +4,12 @@ from random import choice
 
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand, CommandError
-from  django.db.utils import IntegrityError
+from django.db.utils import IntegrityError
 from rest_framework.authtoken.models import Token
+
+
+def random_pass(letter: int):
+    return ''.join(choice(ascii_letters) for _ in range(letter))
 
 
 class Command(BaseCommand):
@@ -15,11 +19,16 @@ class Command(BaseCommand):
         parser.add_argument('--username', type=str)
         parser.add_argument('--password', type=str)
         parser.add_argument('--token', type=str)
+        parser.add_argument('--use-env-var', action='store_true')
 
     def handle(self, *args, **options):
-        username = environ.get("TOKEN_USER_NAME", "tokener")
-        password = environ.get("TOKEN_USER_PASS", ''.join(choice(ascii_letters) for _ in range(10)))
-        key = environ.get("TOKEN_USER_CONTENT")
+
+        username, password, key = None, None, None
+
+        if options["use_env_var"]:
+            username = environ.get("TOKEN_USER_NAME", "tokener")
+            password = environ.get("TOKEN_USER_PASS", random_pass(10))
+            key = environ.get("TOKEN_USER_CONTENT")
 
         if options["username"] is not None:
             username = options["username"]
@@ -27,17 +36,22 @@ class Command(BaseCommand):
         if options["password"] is not None:
             password = options["password"]
 
+        if password is not None:
+            password = random_pass(10)
+
         if options["token"] is not None:
             key = options["token"]
 
-        user = None
+        if username is None or password is None:
+            raise CommandError("Create User Token |> Please et user and password")
+
         try:
             user = User.objects.get(username=username)
-            self.stdout.write(self.style.SUCCESS("Create User Token |> User Found !"))
+            self.stdout.write(self.style.SUCCESS("Create User Token |> User %s Found !" % user.username))
         except User.DoesNotExist:
             self.stdout.write(self.style.ERROR("Create User Token |> User not found creating it !"))
 
-            User.objects.create_user(
+            user = User.objects.create_user(
                 username=username,
                 password=password
             )
