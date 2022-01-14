@@ -18,6 +18,6 @@ app = Celery('tasks',  broker='pyamqp://{}:{}@{}//'.format(
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Load task modules from all registered Django apps.
-app.autodiscover_tasks()
+app.autodiscover_tasks(['client.core'])
 
-from client.core.client_exec_task import client_exec
+#from client.core.tasks import client_exec

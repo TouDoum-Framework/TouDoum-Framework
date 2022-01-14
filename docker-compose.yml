@@ -35,6 +35,7 @@ services:
     build: .
     depends_on:
       - postgres
+      - rabbitmq
       - redis
     environment:
       - MODE=master
@@ -50,12 +51,14 @@ services:
     ports:
       - "8000:8000"
 
-  worker:
+  consumer:
     image: msterhuj/toudoum
     build: .
     depends_on:
+      - rabbitmq
       - master
     environment:
-      - MODE=worker
+      - MODE=consumer
       - API_URL="http://master:8000/api/v1"
       - TOKEN="no.seriously.change.me"
+      - CELERY_EXTRA_ARGS=-l\ INFO\ -E

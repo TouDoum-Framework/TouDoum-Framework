@@ -1,2 +1,5 @@
+from random import randint
+
+
 def run():
-    pass
+    print(str(randint(5, 10)))
