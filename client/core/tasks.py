@@ -16,5 +16,5 @@ def client_exec(module_name, function: str = None, data: dict = None):
     # Import it
 
     tdw = TouDoumWorker()
-    tdw.api.get_client_file_from_module_name(module_name)
+    tdw.api.get_client_file(module_name)
     print("hey " + module_name)

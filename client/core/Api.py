@@ -18,8 +18,15 @@ class Api:
         self.url = os.environ.get('API_URL')
         self.token = os.environ.get('TOKEN')
 
-    def get_client_file_from_module_name(self, module_name):
+    def get_module_configuration(self, module_name):
+        reply = requests.get(self.url + "/module/?name=" + module_name, headers=self.get_authorization_headers())
+
+    def get_client_file(self, module_id):
         pass
+
+    def get_authorization_headers(self):
+        return {'Authorization': 'Token ' + self.token}
+
 
     @deprecated
     def register(self, hostname: str):

@@ -5,6 +5,7 @@ from random import choice
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand, CommandError
 from django.db.utils import IntegrityError
+from dotenv import load_dotenv
 from rest_framework.authtoken.models import Token
 
 
@@ -26,6 +27,7 @@ class Command(BaseCommand):
         username, password, key = None, None, None
 
         if options["use_env_var"]:
+            load_dotenv(".env")
             username = environ.get("TOKEN_USER_NAME", "tokener")
             password = environ.get("TOKEN_USER_PASS", random_pass(10))
             key = environ.get("TOKEN_USER_CONTENT")
