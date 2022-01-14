@@ -12,3 +12,9 @@ class Module(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+
+class ModuleClientFile(models.Model):
+    name = models.CharField(max_length=255)
+    hash = models.CharField(max_length=255)
+    module = models.ForeignKey(Module, on_delete=models.CASCADE)
