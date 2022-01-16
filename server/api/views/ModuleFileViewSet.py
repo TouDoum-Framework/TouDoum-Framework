@@ -1,10 +1,10 @@
 from rest_framework import viewsets, permissions
 
 from server.api.serializers import ModuleSerializer
-from server.modules.models import ModuleClientFile
+from server.modules.models import ModuleFile
 
 
-class ModuleClientFileViewSet(viewsets.ModelViewSet):
-    queryset = ModuleClientFile.objects.all().order_by("id")
+class ModuleFileViewSet(viewsets.ModelViewSet):
+    queryset = ModuleFile.objects.all().order_by("id")
     serializer_class = ModuleSerializer
     permission_classes = [permissions.IsAuthenticated]

@@ -14,7 +14,8 @@ class Module(models.Model):
         return str(self.name)
 
 
-class ModuleClientFile(models.Model):
+class ModuleFile(models.Model):
     name = models.CharField(max_length=255)
     hash = models.CharField(max_length=255)
     module = models.ForeignKey(Module, on_delete=models.CASCADE)
+    is_client = models.BooleanField()
