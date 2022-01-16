@@ -10,7 +10,7 @@ class ModulesConfig(AppConfig):
 
 
 def load_modules() -> list:
-    return [module.replace("\\", ".").replace("/", ".") for module in glob("server/modules/src/*")]
+    return [module.replace("\\", ".").replace("/", ".") for module in glob("modules/*")]
 
 
 def sort_by_key_asc(data: list, key: str) -> list:
@@ -40,7 +40,7 @@ def sync_db() -> None:
     # temp purge all module on db for proper register
     Module.objects.all().delete()
 
-    for module_config_file in glob("server/modules/src/*/config.json"):
+    for module_config_file in glob("modules/*/config.json"):
         with open(module_config_file) as content:
             module_list.append(json_load(content))
 
@@ -64,9 +64,9 @@ def get_urls(file: str) -> list:
     print("Loading module for " + file)
 
     urls = []
-    for module_dir in glob("server/modules/src/*/urls/" + file + ".py"):
-        module_name = re.sub("server/modules/src/|/urls/[a-z]+.py", "", module_dir.replace("\\", "/"))
-        python_path = "server.modules.src." + module_name + ".urls." + file
+    for module_dir in glob("modules/*/urls/" + file + ".py"):
+        module_name = re.sub("modules/|/urls/[a-z]+.py", "", module_dir.replace("\\", "/"))
+        python_path = "modules." + module_name + ".urls." + file
         if file == "panel":
             urls.append(path('panel/module/' + module_name + '/', include(python_path)))
         elif file == "api":
@@ -75,5 +75,5 @@ def get_urls(file: str) -> list:
 
 
 def get_client_file(module: str) -> list:
-    return [re.sub("server/modules/src/" + module + "/client/", "", cf) for cf in
-            glob("server/modules/src/" + module + "/client/**/*.py", recursive=True)]
+    return [re.sub("modules/" + module + "/client/", "", cf) for cf in
+            glob("modules/" + module + "/client/**/*.py", recursive=True)]
