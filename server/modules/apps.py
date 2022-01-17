@@ -76,7 +76,7 @@ def sync_modules_db() -> None:
                     mod_file.module = mod
                     mod_file.name = file
                     mod_file.path = root
-                    mod_file.hash = md5(mod_file.path.encode("ascii")).hexdigest()
+                    mod_file.hash = md5(str(root + "/" + file).encode("ascii")).hexdigest()
                     mod_file.is_client = bool(match(r"modules/[\w\d]*/client", root))
                     mod_file.save()
 

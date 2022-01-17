@@ -32,7 +32,6 @@ class ModuleSerializer(serializers.HyperlinkedModelSerializer):
 class ModuleFileSerializer(serializers.HyperlinkedModelSerializer):
     module = serializers.StringRelatedField(many=False)
 
-
     class Meta:
         model = ModuleFile
-        fields = ["url", "path", "hash", "module", "is_client"]
+        fields = ["url", "name", "path", "hash", "module", "is_client"]
