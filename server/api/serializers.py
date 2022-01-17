@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from server.api.models.Addr import Addr
 from server.api.models.Config import Config
-from server.modules.models import Module, ModuleClientFile
+from server.modules.models import Module, ModuleFile
 
 
 class AddrSerializer(serializers.HyperlinkedModelSerializer):
@@ -21,17 +21,18 @@ class ConfigSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["url", "pause", "modules_enabled", "timeout", "created_at"]
 
 
-class ModuleClientFileSerializer(serializers.HyperlinkedModelSerializer):
-    module = serializers.StringRelatedField(many=True)
-
-    class Meta:
-        model = ModuleClientFile
-        fields = ["name", "hash", "module"]
-
-
 class ModuleSerializer(serializers.HyperlinkedModelSerializer):
     depend_on = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = Module
         fields = ["url", "name", "display_name", "description", "version", "depend_on", "author", "repo"]
+
+
+class ModuleFileSerializer(serializers.HyperlinkedModelSerializer):
+    module = serializers.StringRelatedField(many=False)
+
+
+    class Meta:
+        model = ModuleFile
+        fields = ["url", "path", "hash", "module", "is_client"]

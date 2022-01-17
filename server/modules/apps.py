@@ -1,8 +1,11 @@
-from django.apps import AppConfig
+from re import sub, match
+from os import walk
+from hashlib import md5
 from glob import glob
-from django.urls import path, include
 from json import load as json_load
-import re
+
+from django.apps import AppConfig
+from django.urls import path, include
 
 
 class ModulesConfig(AppConfig):
@@ -33,17 +36,23 @@ def sort_by_key_asc(data: list, key: str) -> list:
     return new_data
 
 
-def sync_db() -> None:
-    from server.modules.models import Module
+def sync_modules_db() -> None:
+    from server.modules.models import Module, ModuleFile
 
     module_list = []
     # temp purge all module on db for proper register
+    ModuleFile.objects.all().delete()
     Module.objects.all().delete()
 
     for module_config_file in glob("modules/*/config.json"):
-        with open(module_config_file) as content:
-            module_list.append(json_load(content))
+        if match(r"modules/[\w\d]*/config\.json", module_config_file.replace("\\", "/")):
+            with open(module_config_file) as content:
+                module_list.append(json_load(content))
+        else:
+            print("Error for name of module " +
+                  sub("modules/|/urls/[a-z]+.py", "", module_config_file.replace("\\", "/")))
 
+    # register module on db with information given by config.json
     for item in sort_by_key_asc(module_list, "depend_on"):
         mod = Module()
         mod.name = item["name"]
@@ -59,13 +68,25 @@ def sync_db() -> None:
 
         mod.save()
 
+        # register all file of current modules
+        for root, dirs, files in walk('modules/'):
+            for file in files:
+                if "__pycache__" not in root:
+                    mod_file = ModuleFile()
+                    mod_file.module = mod
+                    mod_file.name = file
+                    mod_file.path = root
+                    mod_file.hash = md5(mod_file.path.encode("ascii")).hexdigest()
+                    mod_file.is_client = bool(match(r"modules/[\w\d]*/client", root))
+                    mod_file.save()
+
 
 def get_urls(file: str) -> list:
     print("Loading module for " + file)
 
     urls = []
     for module_dir in glob("modules/*/urls/" + file + ".py"):
-        module_name = re.sub("modules/|/urls/[a-z]+.py", "", module_dir.replace("\\", "/"))
+        module_name = sub("modules/|/urls/[a-z]+.py", "", module_dir.replace("\\", "/"))
         python_path = "modules." + module_name + ".urls." + file
         if file == "panel":
             urls.append(path('panel/module/' + module_name + '/', include(python_path)))
@@ -75,5 +96,5 @@ def get_urls(file: str) -> list:
 
 
 def get_client_file(module: str) -> list:
-    return [re.sub("modules/" + module + "/client/", "", cf) for cf in
+    return [sub("modules/" + module + "/client/", "", cf) for cf in
             glob("modules/" + module + "/client/**/*.py", recursive=True)]

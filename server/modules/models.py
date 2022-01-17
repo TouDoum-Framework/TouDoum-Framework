@@ -16,6 +16,10 @@ class Module(models.Model):
 
 class ModuleFile(models.Model):
     name = models.CharField(max_length=255)
+    path = models.CharField(max_length=255)
     hash = models.CharField(max_length=255)
-    module = models.ForeignKey(Module, on_delete=models.CASCADE)
+    module = models.ForeignKey(Module, related_name="modules", on_delete=models.CASCADE)
     is_client = models.BooleanField()
+
+    def __str__(self):
+        return str(self.path)

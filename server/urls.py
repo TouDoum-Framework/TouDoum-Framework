@@ -11,9 +11,9 @@ urlpatterns = [
 ]
 
 try:
-    from server.modules.apps import sync_db
+    from server.modules.apps import sync_modules_db
     print("Module Sync ...")
-    sync_db()
+    sync_modules_db()
     print("Module Sync OK")
 except ProgrammingError:
     print("Init sys data Skipped DB not ready")
