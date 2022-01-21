@@ -1,15 +1,7 @@
-import json
 import os
-from base64 import b64decode
-from pathlib import Path
-
 import requests
-import time
-
-from deprecated.classic import deprecated
 
 
-@deprecated("new api version is now available")
 class Api:
     url: str
     token: str
@@ -28,59 +20,15 @@ class Api:
         return {'Authorization': 'Token ' + self.token}
 
 
-    @deprecated
-    def register(self, hostname: str):
-        print("Try to register client")
-        headers = {'Authorization': self.token}
-        data = {"hostname": hostname}
-        try:
-            reply = requests.post(self.url + "/register", json=data, headers=headers)
-            if reply.status_code == 501:
-                print("Client registered, but no config return by master waiting 60s and retry")
-                time.sleep(60)
-                self.register(hostname)
-            elif reply.status_code == 200:
-                print("Client registered and config hase been receives")
-                return json.loads(reply.text)
-            else:
-                print("Return type error " + reply.status_code)
-                print("Check server logs")
-                return exit(-1)
-        except requests.exceptions.ConnectionError:
-            print("Enable to connect to master waiting 60s and retry")
-            time.sleep(60)
-            self.register(hostname)
+        return url
 
-    @deprecated
-    def get_modules_from_list(self, modules: list):
-        for module_name in modules:
-            Path("./client/modules/" + module_name).mkdir(parents=True, exist_ok=True)
-            print("Getting list of client file for module " + module_name)
-            headers = {'Authorization': self.token}
-            reply = requests.get(self.url + "/module/" + module_name + "/client", headers)
-            print("List received downloading")
-            for file in json.loads(reply.text):
-                file_name = b64decode(file.encode('ascii')).decode('ascii')
-                print("Downloading " + file_name)
-                r = requests.get(self.url + "/module/" + module_name + "/client/" + file, headers)
-                buffer = open("client/modules/" + module_name + "/" + file_name, "w")
-                buffer.write(r.text)
-                buffer.close()
+    def get_client_file(self, module_name):
+        url = self.url_search_builder("file/", {
+            "module": module_name,
+            "client": "1"
+        })
+        reply = requests.get(url, headers=self.get_authorization_headers())
+        pass
 
-    @deprecated
-    def getIP(self):
-        print("Getting ip to scan")
-        headers = {'Authorization': self.token}
-        reply = requests.get(self.url + "/addr", headers=headers)
-        if reply.status_code == 200:
-            data = json.loads(reply.text)
-            print("Ip " + data['ip'] + " receives")
-            return data
-        return None
-
-    @deprecated
-    def save(self, result):
-        print("Saving scan result")
-        headers = {'Authorization': self.token}
-        reply = requests.post(self.url + "/addr", json=result, headers=headers)
-        print("Save Ok")
+    def get_authorization_headers(self):
+        return {'Authorization': 'Token ' + self.token}
