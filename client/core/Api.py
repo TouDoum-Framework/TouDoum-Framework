@@ -8,17 +8,22 @@ class Api:
 
     def __init__(self):
         self.url = os.environ.get('API_URL')
-        self.token = os.environ.get('TOKEN')
+        self.token = os.environ.get('TOKEN_USER_CONTENT')
 
-    def get_module_configuration(self, module_name):
-        reply = requests.get(self.url + "/module/?name=" + module_name, headers=self.get_authorization_headers())
+    def url_search_builder(self, path: str, filter_content: dict) -> str:
+        url = self.url
+        if not url.endswith('/') and not path.startswith('/'):
+            url += '/'
+        url += path
 
-    def get_client_file(self, module_id):
-        pass
+        if filter_content is not None:
+            url += "?"
 
-    def get_authorization_headers(self):
-        return {'Authorization': 'Token ' + self.token}
+            for name, content in filter_content.items():
+                url += name + "=" + content + "&"
 
+            if url.endswith("&"):
+                url = url[:-1]
 
         return url
 
@@ -28,7 +33,17 @@ class Api:
             "client": "1"
         })
         reply = requests.get(url, headers=self.get_authorization_headers())
-        pass
+        if reply.status_code == 200:
+            path = "client/modules/" + module_name
+            if not os.path.exists(path):
+                os.makedirs(path)
+
+            for file in reply.json()['results']:
+                pass
+
+        else:
+            print("Error for task " + module_name + ": " + str(reply.status_code))
 
     def get_authorization_headers(self):
-        return {'Authorization': 'Token ' + self.token}
+        token = "Token " + self.token
+        return {'Authorization': token}

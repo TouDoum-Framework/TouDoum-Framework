@@ -15,6 +15,6 @@ def client_exec(module_name, function: str = None, data: dict = None):
     # download client file if needed
     # Import it
 
+    print("task receive for " + module_name)
     tdw = TouDoumWorker()
     tdw.api.get_client_file(module_name)
-    print("hey " + module_name)

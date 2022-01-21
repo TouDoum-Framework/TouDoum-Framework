@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from client.core.TouDoumWorker import TouDoumWorker
 
 if environ.get("MODE") is None:
-    load_dotenv("../.env")
+    load_dotenv(".env")
     print("Load env from .env file")
 
 celery = Celery('tasks', broker='pyamqp://{}:{}@{}//'.format(
