@@ -1,6 +1,6 @@
 from re import sub, match
 from os import walk
-from hashlib import md5
+from utils.files import md5sum
 from glob import glob
 from json import load as json_load
 
@@ -76,7 +76,7 @@ def sync_modules_db() -> None:
                     mod_file.module = mod
                     mod_file.name = file
                     mod_file.path = root
-                    mod_file.hash = md5(str(root + "/" + file).encode("ascii")).hexdigest()
+                    mod_file.checksum = md5sum(root + "/" + file)
                     mod_file.is_client = bool(match(r"modules/[\w\d]*/client", root))
                     mod_file.save()
 

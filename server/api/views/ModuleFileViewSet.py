@@ -19,9 +19,9 @@ class ModuleFileViewSet(viewsets.ModelViewSet):
             module = Module.objects.filter(name=module_name).first()
             queryset = queryset.filter(module=module)
 
-        file_hash = self.request.query_params.get("hash")
-        if file_hash is not None:
-            queryset = queryset.filter(hash=file_hash)
+        file_checksum = self.request.query_params.get("checksum")
+        if file_checksum is not None:
+            queryset = queryset.filter(checksum=file_checksum)
 
         is_client = self.request.query_params.get("client")
         if is_client is not None:
@@ -32,7 +32,7 @@ class ModuleFileViewSet(viewsets.ModelViewSet):
     @action(detail=False)
     def download(self, request):
         queryset = self.get_queryset()
-        if self.request.query_params.get("hash") is None or queryset.count() > 1:
+        if self.request.query_params.get("checksum") is None or queryset.count() > 1:
             raise Http404
 
         try:

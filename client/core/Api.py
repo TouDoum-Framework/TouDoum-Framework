@@ -1,5 +1,8 @@
 import os
 import requests
+from utils.celery import reject_task
+
+from utils.files import md5sum
 
 
 class Api:
@@ -27,7 +30,7 @@ class Api:
 
         return url
 
-    def get_client_file(self, module_name):
+    def download_client_files_for_module(self, module_name):
         url = self.url_search_builder("file/", {
             "module": module_name,
             "client": "1"
@@ -39,10 +42,35 @@ class Api:
                 os.makedirs(path)
 
             for file in reply.json()['results']:
-                pass
+                # check if file exists with checksum
+                file_path = f"client/modules/{module_name}/{file['name']}"
+                local_file_checksum = md5sum(file_path)
+                if os.path.exists(file_path) and file['checksum'] != local_file_checksum:
+                    # file exists but checksum is different
+                    os.remove(file_path)
+                    print(f"Removed {file_path} because checksum as changed")
+                elif file['checksum'] == local_file_checksum:
+                    # file exists and checksum is the same
+                    print(f"File {file_path} exists and checksum is the same skipping download for this file")
+                    continue
 
+                # download file
+                # override url var wee dont need latest value
+                url = self.url_search_builder("file/download", {
+                    "module": module_name,
+                    "client": "1",
+                    "checksum": file['checksum']
+                })
+                reply_file = requests.get(url, headers=self.get_authorization_headers())
+                if reply_file.status_code == 200:
+                    with open(path + "/" + file['name'], 'wb') as stream:
+                        stream.write(reply_file.content)
+                    print(f"File {file['name']} written on {path}")
+                else:
+                    reject_task(
+                        reason="Error on download client files for module {}".format(module_name), requeue=True)
         else:
-            print("Error for task " + module_name + ": " + str(reply.status_code))
+            reject_task(reason="Error on listing client files for module {}".format(module_name), requeue=True)
 
     def get_authorization_headers(self):
         token = "Token " + self.token
