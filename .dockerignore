@@ -5,6 +5,7 @@ __pycache__/
 venv/
 data/
 docs/
+client/modules/
 migrations/
 .env
 .gitignore

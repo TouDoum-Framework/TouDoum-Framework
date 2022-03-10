@@ -12,9 +12,11 @@ def client_exec(module_name, function: str = None, data: dict = None):
     :param dict data: dict of information that can be used by the module called
     """
     # TODO on task
-    # download client file if needed
     # Import it
 
+    print("task receive for " + module_name)
     tdw = TouDoumWorker()
-    tdw.api.get_client_file_from_module_name(module_name)
-    print("hey " + module_name)
+    tdw.api.download_client_files_for_module(module_name)
+    tdw.moduleLoader.load_module(module_name)
+    obj = tdw.moduleLoader.get_module_object(module_name)
+    obj.run()

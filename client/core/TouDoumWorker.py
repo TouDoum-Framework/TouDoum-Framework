@@ -3,12 +3,12 @@ from socket import gethostname
 
 from celery import Celery
 
-from client.core.Singleton import Singleton
+from client.core.Singleton import SingletonMeta
 from client.core.Api import Api
 from client.core.ModuesLoader import ModulesLoader
 
 
-class TouDoumWorker(Singleton):
+class TouDoumWorker(metaclass=SingletonMeta):
     """
     This class has only a unique instance
     """
@@ -20,7 +20,8 @@ class TouDoumWorker(Singleton):
     def __init__(self):
         self.hostname = gethostname()
         self.api = Api()
-
+        self.moduleLoader = ModulesLoader()
+        
     def set_celery_instance(self, celery_instance) -> TouDoumWorker:
         self.celery = celery_instance
         return self

@@ -12,3 +12,14 @@ class Module(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+
+class ModuleFile(models.Model):
+    name = models.CharField(max_length=255)
+    path = models.CharField(max_length=255)
+    checksum = models.CharField(max_length=255)
+    module = models.ForeignKey(Module, related_name="modules", on_delete=models.CASCADE)
+    is_client = models.BooleanField()
+
+    def __str__(self):
+        return str(self.path)

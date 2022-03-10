@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from server.api.models.Addr import Addr
 from server.api.models.Config import Config
-from server.modules.models import Module
+from server.modules.models import Module, ModuleFile
 
 
 class AddrSerializer(serializers.HyperlinkedModelSerializer):
@@ -27,3 +27,11 @@ class ModuleSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Module
         fields = ["url", "name", "display_name", "description", "version", "depend_on", "author", "repo"]
+
+
+class ModuleFileSerializer(serializers.HyperlinkedModelSerializer):
+    module = serializers.StringRelatedField(many=False)
+
+    class Meta:
+        model = ModuleFile
+        fields = ["url", "name", "path", "checksum", "module", "is_client"]
