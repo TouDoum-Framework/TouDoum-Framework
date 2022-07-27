@@ -1,8 +1,6 @@
-FROM python:3.10-alpine
+FROM python:3.10
 
 LABEL MAINTAINER="gabin.lanore@gmail.com"
-
-RUN apk update && apk add bash --no-cache
 
 ENV SECRET_KEY="No_U"
 ENV TOKEN="Youwouuuu"
@@ -16,14 +14,24 @@ ENV POSTGRES_PASSWORD=pass
 
 ENV REDIS_URL="redis://127.0.0.1:6379/1"
 
+RUN apt update && apt install bash -y && pip install poetry
+
 EXPOSE 8000
+
+# Used for restart gunicorn wiouthout restarting the container
 STOPSIGNAL SIGTERM
+
+# Path of all modules are installed for master or worker
+VOLUME /app/modules
 
 WORKDIR /app
 
-COPY . /app
+# Install libs
+COPY pyproject.toml .
+COPY poetry.lock .
+RUN poetry install
 
-RUN pip3 install -r requirements.txt
+# Copy App and setup init script
+COPY . .
 RUN chmod +x entrypoint.sh
-
 ENTRYPOINT [ "/bin/bash", "entrypoint.sh" ]
