@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'server.modules',
     'server.mq_auth',
     'server.api',
-]# + load_modules()
+] + load_modules()
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

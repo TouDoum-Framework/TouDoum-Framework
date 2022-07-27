@@ -4,7 +4,6 @@ from django.urls import path, include
 from rest_framework import routers
 
 from server.api.views.BrowsableApi import browsable_API
-from server.api.views.AddrViewSet import AddrViewSet
 from server.api.views.ConfigViewSet import ConfigViewSet
 from server.api.views.ModuleViewSet import ModuleViewSet
 from server.api.views.ModuleFileViewSet import ModuleFileViewSet
@@ -12,7 +11,6 @@ from server.modules.apps import get_api_router_endpoint
 
 main_router = routers.DefaultRouter()
 
-main_router.register(r'addr', AddrViewSet)
 main_router.register(r'config', ConfigViewSet)
 main_router.register(r'module', ModuleViewSet)
 main_router.register(r'file', ModuleFileViewSet)
