@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'server.modules',
+    'server.mq_auth',
     'server.api',
     'server.panel'
 ] + load_modules()
