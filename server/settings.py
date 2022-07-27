@@ -30,7 +30,6 @@ INSTALLED_APPS = [
     'server.modules',
     'server.mq_auth',
     'server.api',
-    'server.panel'
 ] + load_modules()
 
 MIDDLEWARE = [
@@ -54,11 +53,11 @@ REST_FRAMEWORK = {
 }
 
 ROOT_URLCONF = 'server.urls'
-TEMPLATE_DIR = os.path.join(BASE_DIR, "server/templates")
+STATIC_URL = '/static/'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATE_DIR],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -107,8 +106,3 @@ USE_L10N = True
 USE_TZ = True
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = int(os.environ.get('DATA_UPLOAD_MAX_NUMBER_FIELDS', "4228250625"))
-
-STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'server/static'),
-)
