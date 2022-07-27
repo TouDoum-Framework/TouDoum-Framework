@@ -15,12 +15,15 @@ services:
       - ./data/postgres:/var/lib/postgresql/data
 
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:3.8-management
     hostname: rabbitmq
     restart: always
     environment:
       - DEFAULT_USER=white
       - DEFAULT_PASS=neo
+    volumes:
+      - ./config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./config/enabled_plugins:/etc/rabbitmq/enabled_plugins
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -31,7 +34,7 @@ services:
       - "6379:6379"
 
   master:
-    image: msterhuj/toudoum
+    image: toudoum/toudoum
     build: .
     depends_on:
       - postgres
@@ -52,7 +55,7 @@ services:
       - "8000:8000"
 
   consumer:
-    image: msterhuj/toudoum
+    image: toudoum/toudoum
     build: .
     depends_on:
       - rabbitmq
