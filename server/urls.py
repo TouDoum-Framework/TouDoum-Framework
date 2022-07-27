@@ -6,7 +6,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', include('server.api.urls')),
-    path('mq/auth', include('server.mq_auth.urls')),
+    path('mq/auth/', include('server.mq_auth.urls')),
     path('admin/', admin.site.urls)
 ]
 

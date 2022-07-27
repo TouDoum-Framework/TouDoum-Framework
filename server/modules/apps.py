@@ -3,6 +3,7 @@ from os import walk
 from utils.files import md5sum
 from glob import glob
 from json import load as json_load
+from deprecated import deprecated
 
 from django.apps import AppConfig
 from django.urls import path, include
@@ -81,6 +82,7 @@ def sync_modules_db() -> None:
                     mod_file.save()
 
 
+@deprecated(reason="drop of support of panel link and new loader for api endpoint")
 def get_urls(file: str) -> list:
     print("Loading module for " + file)
 
@@ -93,6 +95,17 @@ def get_urls(file: str) -> list:
         elif file == "api":
             urls.append(path(r"api/ext/" + module_name + "/", include(python_path)))
     return urls
+
+
+def get_api_router_endpoint() -> dict:
+    print("Loading router module for api")
+
+    router = {}
+    for module_dir in glob("modules/*/urls/api.py"):
+        module_name = sub("modules/|/urls/api.py", "", module_dir.replace("\\", "/"))
+        python_path = "modules." + module_name + ".urls.api"
+        router[module_name] = python_path
+    return router
 
 
 def get_client_file(module: str) -> list:
