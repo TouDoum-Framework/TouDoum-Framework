@@ -1,6 +1,6 @@
 from rest_framework import routers
 
+from modules.example.views.AddrViewSet import AddrViewSet
+
 router = routers.DefaultRouter()
-# register your view set here
-# router.register()
-urlpatterns = router.urls
+router.register(r'addr', AddrViewSet)

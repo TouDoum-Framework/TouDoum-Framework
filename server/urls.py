@@ -5,9 +5,8 @@ from django.db import ProgrammingError
 from django.urls import path, include
 
 urlpatterns = [
-    path('', include('server.panel.urls')),
     path('', include('server.api.urls')),
-    path('mq/auth', include('server.mq_auth.urls')),
+    path('mq/auth/', include('server.mq_auth.urls')),
     path('admin/', admin.site.urls)
 ]
 

@@ -1,3 +1,4 @@
+import sys
 from os import environ
 
 from celery import Celery
@@ -21,4 +22,4 @@ tdw.set_celery_instance(celery)
 if __name__ == '__main__':
     print("Error: to run the celery worker please run this command or refer to the documentation")
     print("Error: > celery -A client.TouDoumClient worker")
-    exit()
+    sys.exit()

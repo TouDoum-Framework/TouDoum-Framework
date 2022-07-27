@@ -2,8 +2,8 @@ import iptools
 from django.http import HttpResponseRedirect
 from rest_framework import viewsets, permissions
 
-from server.api.models.Addr import Addr
-from server.api.serializers import AddrSerializer
+from modules.example.models.Addr import Addr
+from modules.example.serializers import AddrSerializer
 
 
 class AddrViewSet(viewsets.ModelViewSet):

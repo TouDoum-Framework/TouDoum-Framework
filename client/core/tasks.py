@@ -11,8 +11,6 @@ def client_exec(module_name, function: str = None, data: dict = None):
     :param str function: name of the function to be called (default function run on main.py is called)
     :param dict data: dict of information that can be used by the module called
     """
-    # TODO on task
-    # Import it
 
     print("task receive for " + module_name)
     tdw = TouDoumWorker()
