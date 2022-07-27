@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'server.modules',
     'server.mq_auth',
     'server.api',
-] + load_modules()
+]# + load_modules()
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -52,12 +52,15 @@ REST_FRAMEWORK = {
     ]
 }
 
+TEMPLATE_DIR = os.path.join(BASE_DIR, "server/templates")
+
 ROOT_URLCONF = 'server.urls'
 STATIC_URL = '/static/'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
