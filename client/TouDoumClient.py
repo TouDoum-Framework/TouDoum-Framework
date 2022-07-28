@@ -11,9 +11,9 @@ if environ.get("MODE") is None:
     print("Load env from .env file")
 
 celery = Celery('tasks', broker='pyamqp://{}:{}@{}//'.format(
-    environ.get("MQ_USER", "white"),
-    environ.get("MQ_PASS", "neo"),
-    environ.get("MQ_HOST", "127.0.0.1")
+    environ.get('MQ_USER', environ.get('USER_NAME')),
+    environ.get('MQ_PASS', environ.get('USER_PASS')),
+    environ.get("MQ_HOST")
 ))
 celery.autodiscover_tasks(['client.core'])
 tdw = TouDoumWorker()

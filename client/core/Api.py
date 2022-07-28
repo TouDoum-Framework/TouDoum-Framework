@@ -1,17 +1,22 @@
 import os
 import requests
-from utils.celery import reject_task
 
+from utils.celery import reject_task
 from utils.files import md5sum
 
 
 class Api:
     url: str
-    token: str
+    access: tuple
+    headers: dict
 
     def __init__(self):
         self.url = os.environ.get('API_URL')
-        self.token = os.environ.get('TOKEN_USER_CONTENT')
+        self.access = (
+            os.environ.get('MQ_USER', os.environ.get('USER_NAME')),
+            os.environ.get('MQ_PASS', os.environ.get('USER_PASS'))
+        )
+        self.headers = {'Content-Type': 'application/json'}
 
     def url_search_builder(self, path: str, filter_content: dict) -> str:
         url = self.url
@@ -35,15 +40,15 @@ class Api:
             "module": module_name,
             "client": "1"
         })
-        reply = requests.get(url, headers=self.get_authorization_headers())
+        reply = requests.get(url, headers=self.get_headers(), auth=self.get_credentials())
         if reply.status_code == 200:
-            path = "client/modules/" + module_name
+            path = "modules/" + module_name
             if not os.path.exists(path):
                 os.makedirs(path)
 
             for file in reply.json()['results']:
                 # check if file exists with checksum
-                file_path = f"client/modules/{module_name}/{file['name']}"
+                file_path = f"modules/{module_name}/{file['name']}"
                 local_file_checksum = md5sum(file_path)
                 if os.path.exists(file_path) and file['checksum'] != local_file_checksum:
                     # file exists but checksum is different
@@ -61,7 +66,7 @@ class Api:
                     "client": "1",
                     "checksum": file['checksum']
                 })
-                reply_file = requests.get(url, headers=self.get_authorization_headers())
+                reply_file = requests.get(url, headers=self.get_headers(), auth=self.get_credentials())
                 if reply_file.status_code == 200:
                     with open(path + "/" + file['name'], 'wb') as stream:
                         stream.write(reply_file.content)
@@ -72,6 +77,8 @@ class Api:
         else:
             reject_task(reason="Error on listing client files for module {}".format(module_name), requeue=True)
 
-    def get_authorization_headers(self):
-        token = "Token " + self.token
-        return {'Authorization': token}
+    def get_credentials(self) -> tuple:
+        return self.access
+
+    def get_headers(self) -> dict:
+        return self.headers
