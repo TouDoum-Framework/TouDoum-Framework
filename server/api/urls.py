@@ -3,7 +3,7 @@ from importlib import import_module
 from django.urls import path, include
 from rest_framework import routers
 
-from server.api.views.BrowsableApi import browsable_API
+from server.api.views.BrowsableApi import browsable_api
 from server.api.views.ConfigViewSet import ConfigViewSet
 from server.api.views.ModuleViewSet import ModuleViewSet
 from server.api.views.ModuleFileViewSet import ModuleFileViewSet
@@ -22,6 +22,6 @@ for mod_name, subrouter_import_path in get_api_router_endpoint().items():
 
 # /api
 urlpatterns = [
-    path('api', browsable_API, name="browsable_api"),
+    path('api', browsable_api, name="browsable_api"),
     path('api/', include(main_router.urls))
 ]
