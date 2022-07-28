@@ -3,11 +3,17 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework import viewsets, permissions
 
+from server.api.views.PermissionViewSet import PermissionSerializer
+
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
+
+    permissions = PermissionSerializer(many=True, read_only=True)
+
     class Meta:
         model = User
-        fields = ["url", "username", "first_name", "last_name", "email", "is_staff", "is_active", "date_joined"]
+        fields = ["url", "username", "first_name", "last_name", "email",
+                  "groups", "permissions", "is_staff", "is_active", "date_joined"]
 
 
 class UserViewSet(viewsets.ModelViewSet):
