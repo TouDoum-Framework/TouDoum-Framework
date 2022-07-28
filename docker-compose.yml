@@ -10,32 +10,35 @@ services:
       - POSTGRES_USER=please
       - POSTGRES_PASSWORD=change_me
     ports:
-      - 5432:5432
+      - "5432:5432"
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
 
-  mongo:
-    image: mongo
+  rabbitmq:
+    image: rabbitmq:3.8-management
+    hostname: rabbitmq
     restart: always
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=please
-      - MONGO_INITDB_ROOT_PASSWORD=change_me
-    ports:
-      - 27017:27017
+      - DEFAULT_USER=white
+      - DEFAULT_PASS=neo
     volumes:
-      - ./data/mongo:/data/db/
+      - ./config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./config/enabled_plugins:/etc/rabbitmq/enabled_plugins
+    ports:
+      - "5672:5672"
+      - "15672:15672"
 
   redis:
     image: redis
     ports:
-      - 6379:6379
+      - "6379:6379"
 
   master:
-    image: msterhuj/toudoum
+    image: toudoum/toudoum
     build: .
     depends_on:
       - postgres
-      - mongo
+      - rabbitmq
       - redis
     environment:
       - MODE=master
@@ -44,22 +47,21 @@ services:
       - POSTGRES_DB=TouDoum
       - POSTGRES_USER=please
       - POSTGRES_PASSWORD=change_me
-      - MONGO_HOST=mongo
-      - MONGO_USER=please
-      - MONGO_PASS=change_me
       - REDIS_URL="redis://127.0.0.1:6379/1"
       - SECRET_KEY=No_U
       - TOKEN="no.seriously.change.me"
       - ALLOWED_HOSTS=127.0.0.1,localhost
     ports:
-      - 8000:8000
+      - "8000:8000"
 
-  worker:
-    image: msterhuj/toudoum
+  consumer:
+    image: toudoum/toudoum
     build: .
     depends_on:
+      - rabbitmq
       - master
     environment:
-      - MODE=worker
+      - MODE=consumer
       - API_URL="http://master:8000/api/v1"
       - TOKEN="no.seriously.change.me"
+      - CELERY_EXTRA_ARGS=-l\ INFO\ -E

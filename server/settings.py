@@ -1,23 +1,20 @@
 import os
 from dotenv import load_dotenv
-from decouple import config
 
 from server.modules.apps import load_modules
 
 if os.environ.get("MODE") is None:
     load_dotenv(".env")
     print("Load env from .env file")
-else:
-    print("Not using .env file")
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = config('SECRET_KEY', default="No_U")
+SECRET_KEY = os.environ.get('SECRET_KEY', "No_U")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = bool(os.environ.get('DEBUG', False))
 
-ALLOWED_HOSTS = str(config('ALLOWED_HOSTS', default="127.0.0.1,localhost")).split(',')
+ALLOWED_HOSTS = str(os.environ.get('ALLOWED_HOSTS', "127.0.0.1,localhost")).split(',')
 
 # Application definition
 
@@ -29,10 +26,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'server.cluster',
+    'rest_framework.authtoken',
     'server.modules',
+    'server.mq_auth',
     'server.api',
-    'server.panel'
 ] + load_modules()
 
 MIDDLEWARE = [
@@ -43,16 +40,23 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'server.api.TokenAuthMiddleware.TokenAuthMiddleware'
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication'
+    ]
 }
 
-ROOT_URLCONF = 'server.urls'
 TEMPLATE_DIR = os.path.join(BASE_DIR, "server/templates")
+
+ROOT_URLCONF = 'server.urls'
+STATIC_URL = '/static/'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -75,21 +79,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config('POSTGRES_DB', default="TouDoum"),
-        'USER': config("POSTGRES_USER", default="please"),
-        'PASSWORD': config("POSTGRES_PASSWORD", default="change_me"),
-        'HOST': config("POSTGRES_HOST", default="127.0.0.1"),
-        'PORT': config("POSTGRES_PORT", default="5432", cast=int)
+        'NAME': os.environ.get('POSTGRES_DB', "TouDoum"),
+        'USER': os.environ.get("POSTGRES_USER", "please"),
+        'PASSWORD': os.environ.get("POSTGRES_PASSWORD", "change_me"),
+        'HOST': os.environ.get("POSTGRES_HOST", "127.0.0.1"),
+        'PORT': int(os.environ.get("POSTGRES_PORT", "5432"))
     }
 }
 
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": config("REDIS_URL", default="redis://127.0.0.1:6379/1"),
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
+        "LOCATION": os.environ.get("REDIS_URL", "redis://127.0.0.1:6379/1"),
+        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"}
     }
 }
 
@@ -101,14 +103,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = config('TIME_ZONE', default="UTC")
+TIME_ZONE = os.environ.get('TIME_ZONE', "UTC")
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-DATA_UPLOAD_MAX_NUMBER_FIELDS = config('DATA_UPLOAD_MAX_NUMBER_FIELDS', default="4228250625", cast=int)
-
-STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'server/static'),
-)
+DATA_UPLOAD_MAX_NUMBER_FIELDS = int(os.environ.get('DATA_UPLOAD_MAX_NUMBER_FIELDS', "4228250625"))

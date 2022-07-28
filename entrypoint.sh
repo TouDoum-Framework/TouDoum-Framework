@@ -1,22 +1,31 @@
-#!/usr/bin/env bash
-MODE=$(printenv MODE)
-SQL_HOST=$(printenv POSTGRES_HOST)
-SQL_PORT=$(printenv POSTGRES_PORT)
+#!/bin/bash
+function wait_tcp() {
+    echo "Checking $3 on host $1 for port $2";
+    try=0;
+    try_max=5;
+    while ! 2> /dev/null /dev/tcp/"$1"/"$2"; do
+        if [[ "$try" -gt $try_max ]]; then
+            echo "Unable to check port exiting app";
+            exit 1;
+        fi
+        echo "Failed $3 port checking retry on 5s $try/$try_max";
+        ((try++));
+        sleep 5;
+    done;
+    echo "$3 port success";
+}
 
 if [[ $MODE == "master" ]]; then
-        echo "Starting master";
-        echo "Waiting for postgres..."
-        while ! nc -z $SQL_HOST $SQL_PORT; do
-                sleep 1
-        done
-        echo "PostgreSQL started"
-        python3 manage.py makemigrations;
-        python3 manage.py migrate;
-        gunicorn --config server/gunicorn-cfg.py server.wsgi;
-elif [[ $MODE == "worker" ]]; then
-        echo "Starting worker";
-        python3 TouDoumClient.py;
+    echo "Starting master";
+    wait_tcp "$POSTGRES_HOST" "$POSTGRES_PORT" "PostgreSQL";
+    python3 manage.py makemigrations;
+    python3 manage.py migrate;
+    gunicorn --config server/gunicorn-cfg.py server.wsgi;
+elif [[ $MODE == "consumer" ]]; then
+    echo "Starting celery consumer";
+    celery -A client.TouDoumClient worker "$CELERY_EXTRA_ARGS";
 else
-        echo "Please set node at master or worker with MODE env var";
-        exit;
+    if [[ $DEBUG ]]; then bash; fi
+    echo "Please set node at master or consumer with MODE env var";
+    exit;
 fi
