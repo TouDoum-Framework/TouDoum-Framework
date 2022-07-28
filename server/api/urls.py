@@ -7,10 +7,16 @@ from server.api.views.BrowsableApi import browsable_api
 from server.api.views.ConfigViewSet import ConfigViewSet
 from server.api.views.ModuleViewSet import ModuleViewSet
 from server.api.views.ModuleFileViewSet import ModuleFileViewSet
+from server.api.views.UserViewSet import UserViewSet
+from server.api.views.GroupViewSet import GroupViewSet
+from server.api.views.PermissionViewSet import PermissionViewSet
 from server.modules.apps import get_api_router_endpoint
 
 main_router = routers.DefaultRouter()
 
+main_router.register(r"user", UserViewSet)
+main_router.register(r"group", GroupViewSet)
+main_router.register(r"permission", PermissionViewSet)
 main_router.register(r'config', ConfigViewSet)
 main_router.register(r'module', ModuleViewSet)
 main_router.register(r'file', ModuleFileViewSet)
