@@ -1,5 +1,6 @@
 .idea/
 venv/
+modules/
 client/modules/
 data/
 migrations/
