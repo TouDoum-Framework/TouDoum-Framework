@@ -12,11 +12,11 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Group
-        fields = ["url", "name", "permissions"]
+        fields = ["id", "url", "name", "permissions"]
 
 
 class GroupViewSet(viewsets.ModelViewSet):
-    queryset = Group.objects.all()
+    queryset = Group.objects.all().order_by("pk")
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
 

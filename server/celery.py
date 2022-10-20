@@ -5,7 +5,7 @@ from celery import Celery
 # Set the default Django settings module for the 'celery' program.
 environ.setdefault('DJANGO_SETTINGS_MODULE', 'server.settings')
 
-app = Celery('tasks',  broker='pyamqp://{}:{}@{}//'.format(
+app = Celery('tasks', broker='pyamqp://{}:{}@{}//'.format(
     environ.get("MQ_USER", "white"),
     environ.get("MQ_PASS", "neo"),
     environ.get("MQ_HOST", "127.0.0.1")
@@ -20,4 +20,4 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 # Load task modules from all registered Django apps.
 app.autodiscover_tasks(['client.core'])
 
-#from client.core.tasks import client_exec
+# from client.core.tasks import client_exec

@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth.models import User
 
 from rest_framework import serializers
@@ -11,7 +12,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ["url", "username", "first_name", "last_name", "email", "password", "groups", "permissions",
+        fields = ["id", "url", "username", "first_name", "last_name", "email", "password", "groups", "permissions",
                   "is_staff", "is_active", "date_joined"]
         extra_kwargs = {
             "password": {"write_only": True}
@@ -27,10 +28,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects.all().order_by("pk")
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        queryset = User.objects.all().order_by("pk")
+        queryset = User.objects.all()
         return queryset
+
